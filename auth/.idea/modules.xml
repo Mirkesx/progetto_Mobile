@@ -2,10 +2,12 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Swiftshare-master-auth.iml" filepath="$PROJECT_DIR$/Swiftshare-master-auth.iml" group="auth" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/auth.iml" filepath="$PROJECT_DIR$/auth.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/auth-app.iml" filepath="$PROJECT_DIR$/app/auth-app.iml" group="auth/app" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" group="auth/app" />
+      <module fileurl="file://$PROJECT_DIR$/auth.iml" filepath="$PROJECT_DIR$/auth.iml" group="auth" />
+      <module fileurl="file://$PROJECT_DIR$/../internal/chooserx/chooserx.iml" filepath="$PROJECT_DIR$/../internal/chooserx/chooserx.iml" group="auth/internal/chooserx" />
+      <module fileurl="file://$PROJECT_DIR$/internal/internal.iml" filepath="$PROJECT_DIR$/internal/internal.iml" group="auth/internal" />
+      <module fileurl="file://$PROJECT_DIR$/../internal/lint/lint.iml" filepath="$PROJECT_DIR$/../internal/lint/lint.iml" group="auth/internal/lint" />
+      <module fileurl="file://$PROJECT_DIR$/../internal/lintchecks/lintchecks.iml" filepath="$PROJECT_DIR$/../internal/lintchecks/lintchecks.iml" group="auth/internal/lintchecks" />
     </modules>
   </component>
 </project>

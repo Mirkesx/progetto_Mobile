@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "981479291832",
+    "firebase_url": "https://lost-and-found-mc.firebaseio.com",
+    "project_id": "lost-and-found-mc",
+    "storage_bucket": "lost-and-found-mc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:981479291832:android:0dd37cd63f8ec140886d4d",
+        "android_client_info": {
+          "package_name": "com.marco_cavalli.lost_and_found"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "981479291832-99mhc85e43ssfdm87jo9kg3re6c6lner.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB7FfxO95Ht8rgW8VKsHjRARGTv_vQZIsI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "981479291832-6nh722h1boabqv5dqmccrako612vik1p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
