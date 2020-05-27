@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/Ritrovami/Ritrovami.iml" filepath="$PROJECT_DIR$/Ritrovami/Ritrovami.iml" group="auth/Ritrovami" />
+      <module fileurl="file://$PROJECT_DIR$/Ritrovami/app.iml" filepath="$PROJECT_DIR$/Ritrovami/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/auth.iml" filepath="$PROJECT_DIR$/auth.iml" />
+      <module fileurl="file://$PROJECT_DIR$/progetto_Mobile-auth.iml" filepath="$PROJECT_DIR$/progetto_Mobile-auth.iml" group="auth" />
+    </modules>
+  </component>
+</project>
