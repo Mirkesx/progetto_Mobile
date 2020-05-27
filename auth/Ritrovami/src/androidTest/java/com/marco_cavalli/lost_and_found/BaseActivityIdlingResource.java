@@ -1,4 +1,4 @@
-package com.google.firebase.quickstart.auth;
+package com.google.firebase.quickstart.lost_and_found;
 
 import android.app.ProgressDialog;
 import android.support.test.espresso.IdlingResource;

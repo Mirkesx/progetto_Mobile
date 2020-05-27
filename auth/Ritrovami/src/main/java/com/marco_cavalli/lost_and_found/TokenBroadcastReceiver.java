@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.firebase.quickstart.auth;
+package com.google.firebase.quickstart.lost_and_found;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
