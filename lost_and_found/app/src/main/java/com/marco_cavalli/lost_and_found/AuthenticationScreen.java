@@ -7,6 +7,14 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.internal.CallbackManagerImpl;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -21,21 +29,24 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
+import java.util.Arrays;
 import java.util.Collections;
 
 public class AuthenticationScreen extends BaseActivity {
 
     private static final int RC_SIGN_IN_GOOGLE = 9001;
     private static final int RC_SIGN_IN_FIREBASE = 9002;
+    private static final int RC_SIGN_IN_FACEBOOK = 9003;
 
     private static final String TAG_GOOGLE = "GoogleActivity";
-
+    private static final String TAG_FACEBOOK = "FacebookActivity";
 
     private FirebaseAuth mAuth;
     private GoogleSignInClient mGoogleSignInClient;
     private TextView mStatusTextView;
     private TextView mDetailTextView;
     private String signInMethod;
+    private CallbackManager callbackManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +64,7 @@ public class AuthenticationScreen extends BaseActivity {
         findViewById(R.id.disconnect_button).setOnClickListener(view -> revokeAccess());
 
         GoogleInitialization();
+        FacebookInitialization();
 
         signInMethod = "";
 
@@ -70,6 +82,41 @@ public class AuthenticationScreen extends BaseActivity {
         // [END config_signin]
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+    }
+
+
+    private void FacebookInitialization() {
+        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+        boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
+
+        if(isLoggedIn) {
+            LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile"));
+        } else {
+            // Configure Facebook Sign In
+            callbackManager = CallbackManager.Factory.create();
+            LoginButton loginButton = findViewById(R.id.sign_in_button_fb);
+            loginButton.setPermissions("email");
+
+            // Callback registration
+            loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+                @Override
+                public void onSuccess(LoginResult loginResult) {
+                    Log.w(TAG_FACEBOOK, "Facebook sign in succedeed");
+
+                    signInMethod = "Facebook";
+                }
+
+                @Override
+                public void onCancel() {
+                    Log.w(TAG_FACEBOOK, "Google sign in cancelled");
+                }
+
+                @Override
+                public void onError(FacebookException exception) {
+                    Log.w(TAG_FACEBOOK, "Google sign in failed", exception);
+                }
+            });
+        }
     }
 
     // [START on_start_check_user]
@@ -126,6 +173,7 @@ public class AuthenticationScreen extends BaseActivity {
     // [START onactivityresult]
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        callbackManager.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
 
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);

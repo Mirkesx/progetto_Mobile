@@ -105,4 +105,6 @@
     <string name="error_sign_in_failed">Sign in failed, see logs for details.</string>
     <string name="multi_factor_signed_out">You are not signed in. To use this sample, first navigate to the Email/Password example to sign in and then return here to enroll in multi-factor auth.</string>
 
+    <string name="facebook_app_id">1481277308721028</string> <string name="fb_login_protocol_scheme">fb1481277308721028</string>
+
 </resources>
