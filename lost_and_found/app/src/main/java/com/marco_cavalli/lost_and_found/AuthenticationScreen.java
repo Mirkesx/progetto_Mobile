@@ -7,11 +7,12 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
-import com.facebook.internal.CallbackManagerImpl;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
@@ -20,11 +21,14 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
@@ -34,9 +38,9 @@ import java.util.Collections;
 
 public class AuthenticationScreen extends BaseActivity {
 
-    private static final int RC_SIGN_IN_GOOGLE = 9001;
-    private static final int RC_SIGN_IN_FIREBASE = 9002;
-    private static final int RC_SIGN_IN_FACEBOOK = 9003;
+    private static final int RC_SIGN_IN_GOOGLE = 64204;
+    private static final int RC_SIGN_IN_FIREBASE = 64205;
+    private static final int RC_SIGN_IN_FACEBOOK = 64206;
 
     private static final String TAG_GOOGLE = "GoogleActivity";
     private static final String TAG_FACEBOOK = "FacebookActivity";
@@ -63,13 +67,13 @@ public class AuthenticationScreen extends BaseActivity {
         findViewById(R.id.sign_out_button).setOnClickListener(view -> signOut());
         findViewById(R.id.disconnect_button).setOnClickListener(view -> revokeAccess());
 
-        GoogleInitialization();
-        FacebookInitialization();
-
         signInMethod = "";
 
         FirebaseApp.initializeApp(this);
         mAuth = FirebaseAuth.getInstance();
+
+        GoogleInitialization();
+        FacebookInitialization();
     }
 
     private void GoogleInitialization() {
@@ -82,6 +86,13 @@ public class AuthenticationScreen extends BaseActivity {
         // [END config_signin]
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+
+        GoogleSignInAccount lastSignedInAccount= GoogleSignIn.getLastSignedInAccount(this);
+        if(lastSignedInAccount!=null){
+            // user has already logged in, you can check user's email, name etc from lastSignedInAccount
+            Log.d(TAG_GOOGLE, "Got cached sign-in");
+            signInMethod = "Google";
+        }
     }
 
 
@@ -90,33 +101,34 @@ public class AuthenticationScreen extends BaseActivity {
         boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
 
         if(isLoggedIn) {
-            LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile"));
-        } else {
-            // Configure Facebook Sign In
-            callbackManager = CallbackManager.Factory.create();
-            LoginButton loginButton = findViewById(R.id.sign_in_button_fb);
-            loginButton.setPermissions("email");
-
-            // Callback registration
-            loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-                @Override
-                public void onSuccess(LoginResult loginResult) {
-                    Log.w(TAG_FACEBOOK, "Facebook sign in succedeed");
-
-                    signInMethod = "Facebook";
-                }
-
-                @Override
-                public void onCancel() {
-                    Log.w(TAG_FACEBOOK, "Google sign in cancelled");
-                }
-
-                @Override
-                public void onError(FacebookException exception) {
-                    Log.w(TAG_FACEBOOK, "Google sign in failed", exception);
-                }
-            });
+            //LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile"));
+            Log.d(TAG_FACEBOOK, "Got cached sign-in");
+            signInMethod = "Facebook";
+            updateUI(mAuth.getCurrentUser());
         }
+        // Configure Facebook Sign In
+        callbackManager = CallbackManager.Factory.create();
+        LoginButton loginButton = findViewById(R.id.sign_in_button_fb);
+        loginButton.setPermissions("email","public_profile");
+
+        // Callback registration
+        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                    Log.w(TAG_FACEBOOK, "Facebook sign in succedeed");
+                    handleFacebookAccessToken(loginResult.getAccessToken());
+            }
+
+            @Override
+            public void onCancel() {
+                Log.w(TAG_FACEBOOK, "Google sign in cancelled");
+            }
+
+            @Override
+            public void onError(FacebookException exception) {
+                Log.w(TAG_FACEBOOK, "Google sign in failed", exception);
+            }
+        });
     }
 
     // [START on_start_check_user]
@@ -135,9 +147,13 @@ public class AuthenticationScreen extends BaseActivity {
             case "Google":
                 mGoogleSignInClient.signOut().addOnCompleteListener(this, task -> updateUI(null));
                 break;
+            case "Facebook":
+                LoginManager.getInstance().logOut();
+                break;
             default:
-                updateUI(null);
         }
+
+        updateUI(null);
     }
 
     private void revokeAccess() {
@@ -147,6 +163,9 @@ public class AuthenticationScreen extends BaseActivity {
             case "Google":
                 mGoogleSignInClient.revokeAccess().addOnCompleteListener(this, task -> updateUI(null));
                 break;
+            case "Facebook":
+                FirebaseAuth.getInstance().signOut();
+                break;
             default:
                 updateUI(null);
         }
@@ -155,7 +174,18 @@ public class AuthenticationScreen extends BaseActivity {
     private void updateUI(FirebaseUser user) {
         hideProgressBar();
         if (user != null) {
-            //mStatusTextView.setText(getString(R.string.google_status_fmt, user.getEmail()));
+            int layout_string;
+            switch(signInMethod) {
+                case "Google":
+                    layout_string = R.string.google_status_fmt;
+                    break;
+                case "Facebook":
+                    layout_string = R.string.facebook_status_fmt;
+                    break;
+                default:
+                    layout_string = R.string.firebase_status_fmt;
+            }
+            mStatusTextView.setText(getString(layout_string, user.getEmail()));
             mDetailTextView.setText(getString(R.string.firebase_status_fmt, user.getUid()));
 
             findViewById(R.id.sign_in_buttons).setVisibility(View.GONE);
@@ -173,7 +203,6 @@ public class AuthenticationScreen extends BaseActivity {
     // [START onactivityresult]
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        callbackManager.onActivityResult(requestCode, resultCode, data);
         super.onActivityResult(requestCode, resultCode, data);
 
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
@@ -187,20 +216,23 @@ public class AuthenticationScreen extends BaseActivity {
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
                 Log.w(TAG_GOOGLE, "Google sign in failed", e);
-                // [START_EXCLUDE]
                 updateUI(null);
-                // [END_EXCLUDE]
             }
         } else if (requestCode == RC_SIGN_IN_FIREBASE) {
             if (resultCode == RESULT_OK) {
                 // Sign in succeeded
                 updateUI(mAuth.getCurrentUser());
                 signInMethod = "Firebase";
-            } else {
-                // Sign in failed
-                Toast.makeText(this, "Sign In Failed", Toast.LENGTH_SHORT).show();
-                updateUI(null);
             }
+        } else if (requestCode == RC_SIGN_IN_FACEBOOK && (AccessToken.getCurrentAccessToken() == null) )  {
+            //Toast.makeText(this, requestCode+ " " +resultCode, Toast.LENGTH_SHORT).show();
+            callbackManager.onActivityResult(requestCode, resultCode, data);
+            Log.w(TAG_FACEBOOK, "Facebook sign in");
+            signInMethod = "Facebook";
+        } else {
+            // Sign in failed
+            Toast.makeText(this, "Sign In Failed", Toast.LENGTH_SHORT).show();
+            updateUI(null);
         }
     }
     // [END onactivityresult]
@@ -248,5 +280,29 @@ public class AuthenticationScreen extends BaseActivity {
                 .build();
 
         startActivityForResult(intent, RC_SIGN_IN_FIREBASE);
+    }
+
+    private void handleFacebookAccessToken(AccessToken token) {
+        Log.d(TAG_FACEBOOK, "handleFacebookAccessToken:" + token.getToken());
+
+        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d(TAG_FACEBOOK, "signInWithCredential:success");
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            signInMethod = "Facebook";
+                            updateUI(user);
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG_FACEBOOK, "signInWithCredential:failure", task.getException());
+                            Toast.makeText(getApplicationContext(), "Authentication failed.", Toast.LENGTH_SHORT).show();
+                            updateUI(null);
+                        }
+                    }
+                });
     }
 }
