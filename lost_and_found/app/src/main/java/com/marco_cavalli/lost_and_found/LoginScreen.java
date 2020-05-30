@@ -35,7 +35,7 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
 import java.util.Collections;
 
-public class AuthenticationScreen extends BaseActivity {
+public class LoginScreen extends BaseActivity {
 
     private static final int RC_SIGN_IN_GOOGLE = 64204;
     private static final int RC_SIGN_IN_FIREBASE = 64205;
@@ -54,7 +54,7 @@ public class AuthenticationScreen extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_authentication);
+        setContentView(R.layout.activity_login);
 
         // Views
         mStatusTextView = findViewById(R.id.status);
@@ -91,6 +91,7 @@ public class AuthenticationScreen extends BaseActivity {
             // user has already logged in, you can check user's email, name etc from lastSignedInAccount
             Log.d(TAG_GOOGLE, "Got cached sign-in");
             signInMethod = "Google";
+            loadDashboard();
         }
     }
 
@@ -103,6 +104,7 @@ public class AuthenticationScreen extends BaseActivity {
             //LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile"));
             Log.d(TAG_FACEBOOK, "Got cached sign-in");
             signInMethod = "Facebook";
+            loadDashboard();
             updateUI(mAuth.getCurrentUser());
         }
         // Configure Facebook Sign In
@@ -212,6 +214,7 @@ public class AuthenticationScreen extends BaseActivity {
                 GoogleSignInAccount account = task.getResult(ApiException.class);
                 firebaseAuthWithGoogle(account);
                 signInMethod = "Google";
+                loadDashboard();
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
                 Log.w(TAG_GOOGLE, "Google sign in failed", e);
@@ -222,12 +225,14 @@ public class AuthenticationScreen extends BaseActivity {
                 // Sign in succeeded
                 updateUI(mAuth.getCurrentUser());
                 signInMethod = "Firebase";
+                loadDashboard();
             }
         } else if (requestCode == RC_SIGN_IN_FACEBOOK && (AccessToken.getCurrentAccessToken() == null) )  {
             //Toast.makeText(this, requestCode+ " " +resultCode, Toast.LENGTH_SHORT).show();
             callbackManager.onActivityResult(requestCode, resultCode, data);
             Log.w(TAG_FACEBOOK, "Facebook sign in");
             signInMethod = "Facebook";
+            loadDashboard();
         } else {
             // Sign in failed
             Toast.makeText(this, "Sign In Failed", Toast.LENGTH_SHORT).show();
@@ -294,6 +299,7 @@ public class AuthenticationScreen extends BaseActivity {
                             Log.d(TAG_FACEBOOK, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             signInMethod = "Facebook";
+                            loadDashboard();
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
@@ -303,5 +309,12 @@ public class AuthenticationScreen extends BaseActivity {
                         }
                     }
                 });
+    }
+
+    private void loadDashboard() {
+        Intent intent = new Intent(this, Dashboard.class);
+        intent.putExtra("signInMethod",signInMethod);
+        startActivity(intent);
+        finish();
     }
 }
