@@ -49,6 +49,7 @@ public class ProfileFragment extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d("LoginMarco","Auth " + FirebaseAuth.getInstance().getUid());
                 FirebaseAuth.getInstance().signOut();
                 Intent intent = new Intent(getActivity(), LoginScreen.class);
                 //intent.putExtra();

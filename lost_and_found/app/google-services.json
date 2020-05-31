@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "981479291832-uipjlg770mles2ujclevha0eshkr91hh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.marco_cavalli.lost_and_found",
+            "certificate_hash": "9e423dda80602796c3b59b4ef1591c91c508cd0c"
+          }
+        },
+        {
           "client_id": "981479291832-6nh722h1boabqv5dqmccrako612vik1p.apps.googleusercontent.com",
           "client_type": 3
         }
