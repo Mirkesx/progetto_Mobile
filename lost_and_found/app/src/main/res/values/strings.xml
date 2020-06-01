@@ -6,6 +6,16 @@
     <string name="title_notifications">Notifications</string>
     <string name="title_profile">Profile</string>
 
+    <string name="profile_edit">Edit</string>
+    <string name="profile_logout">Log Out</string>
+    <string name="profile_email">Email</string>
+    <string name="profile_display_name">Your name</string>
+    <string name="profile_gender">Gender</string>
+    <string name="profile_city">City</string>
+    <string name="profile_birthday">Birthday</string>
+    <string name="profile_update">Update</string>
+
+
     <!-- Strings for Auth -->
 
     <string name="label_google_sign_in">Firebase + Google Sign In</string>
@@ -111,5 +121,6 @@
     <string name="multi_factor_signed_out">You are not signed in. To use this sample, first navigate to the Email/Password example to sign in and then return here to enroll in multi-factor auth.</string>
 
     <string name="facebook_app_id">1481277308721028</string> <string name="fb_login_protocol_scheme">fb1481277308721028</string>
+
 
 </resources>

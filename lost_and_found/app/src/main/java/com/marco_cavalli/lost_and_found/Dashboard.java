@@ -64,7 +64,10 @@ public class Dashboard extends AppCompatActivity {
                         String userID = ((Map) entry.getValue()).get("userID").toString();
                         String displayName = ((Map) entry.getValue()).get("displayName").toString();
                         String email = ((Map) entry.getValue()).get("email").toString();
-                        user = new User(userID, displayName, email);
+                        String gender = ((Map) entry.getValue()).get("gender").toString();
+                        String city = ((Map) entry.getValue()).get("city").toString();
+                        String birthday = ((Map) entry.getValue()).get("birthday").toString();
+                        user = new User(userID, displayName, email, gender, city, birthday);
                     }
                 }
             }
@@ -73,6 +76,6 @@ public class Dashboard extends AppCompatActivity {
             public void onCancelled(DatabaseError databaseError) {
             }
         };
-        myRef.child("users").addValueEventListener(userListener);
+        myRef.child("users").addListenerForSingleValueEvent(userListener);
     }
 }

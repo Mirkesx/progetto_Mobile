@@ -26,11 +26,15 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.marco_cavalli.lost_and_found.objects.User;
 
 import java.util.Collections;
+import java.util.Map;
 
 public class LoginScreen extends BaseActivity {
 
@@ -254,8 +258,26 @@ public class LoginScreen extends BaseActivity {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference();
 
-        User user = new User(mAuth.getUid(), displayName, email);
+        ValueEventListener userListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                boolean registered = false;
+                for(Map.Entry<String, Object> entry : ((Map<String,Object>) dataSnapshot.getValue()).entrySet()) {
+                    if(entry.getKey().equals(mAuth.getUid())) {
+                        registered = true;
+                    }
+                }
+                if(!registered) {
+                    User user = new User(mAuth.getUid(), displayName, email);
 
-        myRef.child("users").child(mAuth.getUid()).setValue(user);
+                    myRef.child("users").child(mAuth.getUid()).setValue(user);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        };
+        myRef.child("users").addListenerForSingleValueEvent(userListener);
     }
 }

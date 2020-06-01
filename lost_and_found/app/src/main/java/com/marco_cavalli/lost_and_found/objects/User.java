@@ -8,6 +8,42 @@ public class User {
     public String userID;
     public String displayName;
     public String email;
+    public String gender;
+    public String city;
+    public String birthday;
+
+    public User(String userID, String displayName, String email, String gender, String city, String birthday) {
+        this.userID = userID;
+        this.displayName = displayName;
+        this.email = email;
+        this.gender = gender;
+        this.city = city;
+        this.birthday = birthday;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
+    }
 
     public User() {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
@@ -41,5 +77,8 @@ public class User {
         this.userID = userID;
         this.displayName = displayName;
         this.email = email;
+        this.gender = "";
+        this.city = "";
+        this.birthday ="";
     }
 }

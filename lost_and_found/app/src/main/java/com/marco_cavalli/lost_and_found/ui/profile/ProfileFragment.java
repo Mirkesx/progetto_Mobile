@@ -7,8 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -18,26 +18,16 @@ import com.facebook.login.LoginManager;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.marco_cavalli.lost_and_found.Dashboard;
 import com.marco_cavalli.lost_and_found.LoginScreen;
 import com.marco_cavalli.lost_and_found.R;
 import com.marco_cavalli.lost_and_found.objects.User;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.Map;
-
-import static android.content.ContentValues.TAG;
-
 public class ProfileFragment extends Fragment {
 
-    private ProfileViewModel profileViewModel;
+    //private ProfileViewModel profileViewModel;
     private String signInMethod;
     private User user;
 
@@ -45,16 +35,42 @@ public class ProfileFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         signInMethod = ((Dashboard)getActivity()).getSignInMethod();
         user = ((Dashboard) getActivity()).getUser();
-        profileViewModel = ViewModelProviders.of(this).get(ProfileViewModel.class);
+        //profileViewModel = ViewModelProviders.of(this).get(ProfileViewModel.class);
         View root = inflater.inflate(R.layout.fragment_profile, container, false);
+
+        //TEXT VIEW
         final TextView textViewName = root.findViewById(R.id.profile_display_name);
         final TextView textViewEmail = root.findViewById(R.id.profile_email);
-        final Button button = root.findViewById(R.id.logout);
+        final TextView textViewGender = root.findViewById(R.id.profile_gender);
+        final TextView textViewCity = root.findViewById(R.id.profile_city);
+        final TextView textViewBirthday = root.findViewById(R.id.profile_birthday);
 
+        //EDIT TEXT
+        final EditText editViewGender = root.findViewById(R.id.profile_gender_edit);
+        final EditText editViewCity = root.findViewById(R.id.profile_city_edit);
+        final EditText editViewBirthday = root.findViewById(R.id.profile_birthday_edit);
+
+        //BUTTON
+        final Button edit = root.findViewById(R.id.profile_edit);
+        final Button logout = root.findViewById(R.id.profile_logout);
+        final Button update = root.findViewById(R.id.profile_update);
+
+        //SHOWING TEXTVIEWS
         textViewName.setText(user.getDisplayName());
         textViewEmail.setText(user.getEmail());
-        button.setOnClickListener(v -> {
-            Log.d("LoginMarco","Auth " + FirebaseAuth.getInstance().getUid());
+        textViewGender.setText(user.getGender());
+        textViewCity.setText(user.getCity());
+        textViewBirthday.setText(user.getBirthday());
+
+
+        //BUTTONS LISTENERS
+
+        edit.setOnClickListener(v -> {
+            root.findViewById(R.id.profile_show_layout).setVisibility(View.GONE);
+            root.findViewById(R.id.profile_edit_layout).setVisibility(View.VISIBLE);
+        });
+
+        logout.setOnClickListener(v -> {
             FirebaseAuth.getInstance().signOut();
             Intent intent = new Intent(getActivity(), LoginScreen.class);
             //intent.putExtra();
@@ -71,6 +87,28 @@ public class ProfileFragment extends Fragment {
             startActivity(intent);
             getActivity().finish();
         });
+
+        update.setOnClickListener(v -> {
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            DatabaseReference myRef = database.getReference();
+
+            user.setGender(editViewGender.getText().toString());
+            user.setCity(editViewCity.getText().toString());
+            user.setBirthday(editViewBirthday.getText().toString());
+
+            myRef.child("users").child(user.getUserID()).setValue(user);
+
+            textViewGender.setText(user.getGender());
+            textViewCity.setText(user.getCity());
+            textViewBirthday.setText(user.getBirthday());
+
+            root.findViewById(R.id.profile_show_layout).setVisibility(View.VISIBLE);
+            root.findViewById(R.id.profile_edit_layout).setVisibility(View.GONE);
+        });
+
+        root.findViewById(R.id.profile_show_layout).setVisibility(View.VISIBLE);
+        root.findViewById(R.id.profile_edit_layout).setVisibility(View.GONE);
+
         return root;
     }
 }
