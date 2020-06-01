@@ -208,8 +208,6 @@ public class LoginScreen extends BaseActivity {
     // [END auth_with_google]
 
     private void handleFacebookAccessToken(AccessToken token) {
-        Log.d(TAG_FACEBOOK, "handleFacebookAccessToken:" + token.getToken());
-
         AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(this, task -> {
@@ -225,19 +223,18 @@ public class LoginScreen extends BaseActivity {
     }
 
     private void loadDashboard() {
-        Intent intent = new Intent(this, Dashboard.class);
-        intent.putExtra("signInMethod",signInMethod);
-        startActivity(intent);
-
-        if(mAuth.getUid() == null)
-            //Wait for the mAuth to get the Current User
-            mAuth.addAuthStateListener(firebaseAuth -> {
-                if(mAuth.getUid() != null) {//Check if the change is because of a sign-in event
-                    setUserInfo();
-                    handleRegistration();
-                }
-            });
-        finish();
+        //Wait for the mAuth to get the Current User
+        mAuth.addAuthStateListener(firebaseAuth -> {
+            if(mAuth.getUid() != null) {//Check if the change is because of a sign-in event
+                Intent intent = new Intent(this, Dashboard.class);
+                intent.putExtra("signInMethod",signInMethod);
+                intent.putExtra("uid",mAuth.getUid());
+                startActivity(intent);
+                setUserInfo();
+                handleRegistration();
+                finish();
+            }
+        });
     }
 
     private void setUserInfo() {
@@ -255,10 +252,10 @@ public class LoginScreen extends BaseActivity {
 
     private void handleRegistration() {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("users/"+mAuth.getUid());
+        DatabaseReference myRef = database.getReference();
 
-        User user = new User(displayName, email);
+        User user = new User(mAuth.getUid(), displayName, email);
 
-        myRef.setValue(user);
+        myRef.child("users").child(mAuth.getUid()).setValue(user);
     }
 }

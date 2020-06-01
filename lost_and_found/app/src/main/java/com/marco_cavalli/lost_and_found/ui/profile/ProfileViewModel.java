@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.marco_cavalli.lost_and_found.Dashboard;
 
 public class ProfileViewModel extends ViewModel {
 
@@ -12,7 +13,7 @@ public class ProfileViewModel extends ViewModel {
 
     public ProfileViewModel() {
         mText = new MutableLiveData<>();
-        mText.setValue(FirebaseAuth.getInstance().getCurrentUser().getEmail());
+        mText.setValue("");
     }
 
     public LiveData<String> getText() {
