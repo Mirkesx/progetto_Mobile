@@ -58,6 +58,7 @@ public class LoginScreen extends BaseActivity {
     private String signInMethod;
     private CallbackManager callbackManager;
     private String displayName;
+    private String email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,28 +95,10 @@ public class LoginScreen extends BaseActivity {
         // [END config_signin]
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-
-        GoogleSignInAccount lastSignedInAccount= GoogleSignIn.getLastSignedInAccount(this);
-        if(lastSignedInAccount!=null){
-            // user has already logged in, you can check user's email, name etc from lastSignedInAccount
-            Log.d(TAG_GOOGLE, "Got cached sign-in");
-            signInMethod = "Google";
-            loadDashboard();
-        }
     }
 
 
     private void FacebookInitialization() {
-        AccessToken accessToken = AccessToken.getCurrentAccessToken();
-        boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
-
-        if(isLoggedIn) {
-            //LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile"));
-            Log.d(TAG_FACEBOOK, "Got cached sign-in");
-            signInMethod = "Facebook";
-            loadDashboard();
-            //updateUI(mAuth.getCurrentUser());
-        }
         // Configure Facebook Sign In
         callbackManager = CallbackManager.Factory.create();
         LoginButton loginButton = findViewById(R.id.sign_in_button_fb);
@@ -146,6 +129,32 @@ public class LoginScreen extends BaseActivity {
     public void onStart() {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
+        checkAlreadySigned();
+    }
+
+    private void checkAlreadySigned() {
+        //Check Facebook Auth already existing
+        AccessToken accessToken = AccessToken.getCurrentAccessToken();
+        boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
+
+        if(isLoggedIn) {
+            //LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile"));
+            Log.d(TAG_FACEBOOK, "Got cached sign-in");
+            signInMethod = "Facebook";
+            loadDashboard();
+            //updateUI(mAuth.getCurrentUser());
+        }
+
+        //Check Google Auth already existing
+        GoogleSignInAccount lastSignedInAccount= GoogleSignIn.getLastSignedInAccount(this);
+        if(lastSignedInAccount!=null){
+            // user has already logged in, you can check user's email, name etc from lastSignedInAccount
+            Log.d(TAG_GOOGLE, "Got cached sign-in");
+            signInMethod = "Google";
+            loadDashboard();
+        }
+
+        //Check FireBase Auth
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if(currentUser != null)
             loadDashboard();
@@ -234,7 +243,7 @@ public class LoginScreen extends BaseActivity {
             }
         } else if (requestCode == RC_SIGN_IN_FIREBASE && resultCode == RESULT_OK) {
             // Sign in succeeded
-            mAuth.getCurrentUser();
+            FirebaseUser user = mAuth.getCurrentUser();
             //updateUI(mAuth.getCurrentUser());
             signInMethod = "Firebase";
             loadDashboard();
@@ -271,6 +280,8 @@ public class LoginScreen extends BaseActivity {
                         // Sign in success, update UI with the signed-in user's information
                         Log.d(TAG_GOOGLE, "signInWithCredential:success");
                         FirebaseUser user = mAuth.getCurrentUser();
+                        displayName = "Google";
+                        email = user.getEmail();
                         //updateUI(user);
                     } else {
                         // If sign in fails, display a message to the user.
@@ -311,6 +322,7 @@ public class LoginScreen extends BaseActivity {
                             FirebaseUser currentUser = mAuth.getCurrentUser();
                             signInMethod = "Facebook";
                             displayName = "Facebook";
+                            email = "Email";
                             loadDashboard();
                             //updateUI(user);
                         } else {
@@ -324,18 +336,41 @@ public class LoginScreen extends BaseActivity {
     }
 
     private void loadDashboard() {
-        Log.d("LoginMarco","Auth " + mAuth.getUid());
         Intent intent = new Intent(this, Dashboard.class);
         intent.putExtra("signInMethod",signInMethod);
         startActivity(intent);
+
+        if(mAuth.getUid() == null)
+            mAuth.addAuthStateListener(new FirebaseAuth.AuthStateListener() { //Wait for the mAuth to get the Current User
+                @Override
+                public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                    if(mAuth.getUid() != null) {//Check if the change is because of a sign-in event
+                        setUserInfo();
+                        handleRegistration();
+                        Log.d("LoginMarco","Auth " + mAuth.getUid());
+                    }
+                }
+            });
         finish();
+    }
+
+    private void setUserInfo() {
+        email = mAuth.getCurrentUser().getEmail();
+
+        switch(signInMethod) {
+            case "Facebook":
+                displayName = "Facebook";
+                break;
+            default:
+                displayName = mAuth.getCurrentUser().getDisplayName();
+        }
     }
 
     private void handleRegistration() {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("users/"+mAuth.getUid());
 
-        User user = new User("", mAuth.getCurrentUser().getEmail());;
+        User user = new User(displayName, email);;
 
         myRef.setValue(user);
     }
