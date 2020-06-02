@@ -1,5 +1,7 @@
 package com.marco_cavalli.lost_and_found.objects;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.IgnoreExtraProperties;
 import com.marco_cavalli.lost_and_found.R;
 
@@ -92,5 +94,15 @@ public class User {
 
     public void setUserID(String userID) {
         this.userID = userID;
+    }
+
+    public String updateNumberObjects() {
+        this.number_objects++;
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference();
+        myRef.child("users").child(this.userID).setValue(this);
+
+        return ""+(this.number_objects-1);
     }
 }

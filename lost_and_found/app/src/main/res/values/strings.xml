@@ -35,4 +35,10 @@
 
     <string name="pick_gender" >Pick a gender</string>
     <string name="home_new_object">Add an object</string>
+    <string name="object_description_hint">Add a description</string>
+    <string name="object_description">Object\'s description</string>
+    <string name="object_name_hint">Add the name of the object</string>
+    <string name="object_name">Object\'s name</string>
+    <string name="home_create_button">Create</string>
+    <string name="home_create_missing_name">Must set a name!</string>
 </resources>
