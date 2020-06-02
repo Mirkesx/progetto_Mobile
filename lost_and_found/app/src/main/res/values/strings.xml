@@ -6,6 +6,9 @@
     <string name="title_notifications">Notifications</string>
     <string name="title_profile">Profile</string>
 
+
+    <!-- Strings for profile Fragment -->
+
     <string name="profile_edit">Edit</string>
     <string name="profile_logout">Log Out</string>
     <string name="profile_email">Email</string>
@@ -14,6 +17,10 @@
     <string name="profile_city">City</string>
     <string name="profile_birthday">Birthday</string>
     <string name="profile_update">Update</string>
+    <string name="profile_birthday_edit_hint">Click to pick a date</string>
+    <string name="gender_male">Male</string>
+    <string name="gender_female">Female</string>
+    <string name="gender_not_specified">Not specified</string>
 
 
     <!-- Strings for Auth -->
@@ -121,6 +128,9 @@
     <string name="multi_factor_signed_out">You are not signed in. To use this sample, first navigate to the Email/Password example to sign in and then return here to enroll in multi-factor auth.</string>
 
     <string name="facebook_app_id">1481277308721028</string> <string name="fb_login_protocol_scheme">fb1481277308721028</string>
-
+    <string name="profile_gender_hint">Click to pick a gender</string>
+    <string name="Done">Done</string>
+    <string name="Cancel">Cancel</string>
+    <string name="CalendarTag">Birthday Calendar Picker</string>
 
 </resources>

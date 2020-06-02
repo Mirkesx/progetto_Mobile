@@ -53,6 +53,9 @@ dependencies {
     'com.facebook.android:facebook-android-sdk:[5,6)'
     implementation 'androidx.browser:browser:1.0.0'
 
+    //CALENDAR
+    implementation 'com.code-troopers.betterpickers:library:3.1.0'
+
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'com.google.android.material:material:1.1.0'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
