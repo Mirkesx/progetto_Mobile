@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Ritrovami!</string>
+    <string name="title_notifications">Notifiche</string>
+    <string name="title_profile">Profilo</string>
+    <string name="Confirm">Seleziona</string>
+    <string name="Cancel">Cancella</string>
+    <string name="profile_edit">Modifica</string>
+    <string name="profile_display_name">Il tuo nome</string>
+    <string name="profile_gender">Genere</string>
+    <string name="profile_city">Città</string>
+    <string name="profile_birthday">Data di nascita</string>
+    <string name="profile_update">Aggiorna</string>
+    <string name="profile_birthday_edit_hint">Clicca per scegliere una data</string>
+    <string name="gender_male">Maschio</string>
+    <string name="gender_female">Femmina</string>
+    <string name="gender_not_specified">Non specificato</string>
+    <string name="profile_gender_hint">Clicca per scegliere un genere</string>
+    <string name="CalendarTag">Calendario</string>
+    <string name="pick_gender">Scegli il genere</string>
+</resources>

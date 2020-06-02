@@ -1,6 +1,7 @@
 package com.marco_cavalli.lost_and_found.objects;
 
 import com.google.firebase.database.IgnoreExtraProperties;
+import com.marco_cavalli.lost_and_found.R;
 
 @IgnoreExtraProperties
 public class User {
@@ -8,11 +9,11 @@ public class User {
     public String userID;
     public String displayName;
     public String email;
-    public String gender;
+    public int gender;
     public String city;
     public String birthday;
 
-    public User(String userID, String displayName, String email, String gender, String city, String birthday) {
+    public User(String userID, String displayName, String email, int gender, String city, String birthday) {
         this.userID = userID;
         this.displayName = displayName;
         this.email = email;
@@ -21,11 +22,11 @@ public class User {
         this.birthday = birthday;
     }
 
-    public String getGender() {
+    public int getGender() {
         return gender;
     }
 
-    public void setGender(String gender) {
+    public void setGender(int gender) {
         this.gender = gender;
     }
 
@@ -77,7 +78,7 @@ public class User {
         this.userID = userID;
         this.displayName = displayName;
         this.email = email;
-        this.gender = "";
+        this.gender = R.string.gender_not_specified;
         this.city = "";
         this.birthday ="";
     }

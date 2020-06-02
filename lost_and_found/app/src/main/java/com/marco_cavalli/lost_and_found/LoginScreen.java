@@ -233,10 +233,29 @@ public class LoginScreen extends BaseActivity {
                 Intent intent = new Intent(this, Dashboard.class);
                 intent.putExtra("signInMethod",signInMethod);
                 intent.putExtra("uid",mAuth.getUid());
-                startActivity(intent);
                 setUserInfo();
-                handleRegistration();
-                finish();
+
+                FirebaseDatabase database = FirebaseDatabase.getInstance();
+                DatabaseReference myRef = database.getReference();
+
+                ValueEventListener userListener = new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Map<String,Object> data = ((Map<String,Object>) dataSnapshot.getValue());
+                        if(data == null || data.get(mAuth.getUid()) == null) {
+                            User user = new User(mAuth.getUid(), displayName, email);
+
+                            myRef.child("users").child(mAuth.getUid()).setValue(user);
+                        }
+                        startActivity(intent);
+                        finish();
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                    }
+                };
+                myRef.child("users").addListenerForSingleValueEvent(userListener);
             }
         });
     }
@@ -252,32 +271,5 @@ public class LoginScreen extends BaseActivity {
             default:
                 displayName = mAuth.getCurrentUser().getDisplayName();
         }
-    }
-
-    private void handleRegistration() {
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference();
-
-        ValueEventListener userListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                boolean registered = false;
-                for(Map.Entry<String, Object> entry : ((Map<String,Object>) dataSnapshot.getValue()).entrySet()) {
-                    if(entry.getKey().equals(mAuth.getUid())) {
-                        registered = true;
-                    }
-                }
-                if(!registered) {
-                    User user = new User(mAuth.getUid(), displayName, email);
-
-                    myRef.child("users").child(mAuth.getUid()).setValue(user);
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
-        };
-        myRef.child("users").addListenerForSingleValueEvent(userListener);
     }
 }

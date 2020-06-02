@@ -1,12 +1,8 @@
 package com.marco_cavalli.lost_and_found;
 
 import android.os.Bundle;
-import android.view.ContextMenu;
-import android.view.MenuInflater;
-import android.view.View;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -62,16 +58,18 @@ public class Dashboard extends AppCompatActivity {
         ValueEventListener userListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for(Map.Entry<String, Object> entry : ((Map<String,Object>) dataSnapshot.getValue()).entrySet()) {
-                    if(entry.getKey().equals(uid)) {
-                        String userID = ((Map) entry.getValue()).get("userID").toString();
-                        String displayName = ((Map) entry.getValue()).get("displayName").toString();
-                        String email = ((Map) entry.getValue()).get("email").toString();
-                        String gender = ((Map) entry.getValue()).get("gender").toString();
-                        String city = ((Map) entry.getValue()).get("city").toString();
-                        String birthday = ((Map) entry.getValue()).get("birthday").toString();
-                        user = new User(userID, displayName, email, gender, city, birthday);
-                    }
+                Map<String,Object> data = ((Map<String,Object>) dataSnapshot.getValue());
+                if(data.get(uid) != null) {
+                    String userID = ((Map)data.get(uid)).get("userID").toString();
+                    String displayName = ((Map) data.get(uid)).get("displayName").toString();
+                    String email = ((Map) data.get(uid)).get("email").toString();
+                    int gender = Integer.parseInt(((Map) data.get(uid)).get("gender").toString());
+                    String city = "", birthday = "";
+                    if(((Map) data.get(uid)).get("city") != null)
+                        city = ((Map) data.get(uid)).get("city").toString();
+                    if(((Map) data.get(uid)).get("birthday") != null)
+                        birthday = ((Map) data.get(uid)).get("birthday").toString();
+                    user = new User(userID, displayName, email, gender, city, birthday);
                 }
             }
 
