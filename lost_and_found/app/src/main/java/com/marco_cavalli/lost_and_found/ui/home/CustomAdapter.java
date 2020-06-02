@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,16 +18,20 @@ import java.util.ArrayList;
 
 public class CustomAdapter extends ArrayAdapter {
 
-    public ArrayList<PersonalObject> tdi;
+    private final Context context;
+    public ArrayList<PersonalObject> objs;
 
     public CustomAdapter(@NonNull Context context, int resource, @NonNull ArrayList<PersonalObject> objects) {
         super(context, resource, objects);
-        this.tdi = objects;
+        this.objs = objects;
+        this.context = context;
+        Toast.makeText(context, "Prova", Toast.LENGTH_SHORT).show();
     }
 
     @NonNull
     @Override
     public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+        Toast.makeText(context, "Ciao", Toast.LENGTH_SHORT).show();
 
         LayoutInflater inf = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -34,6 +39,7 @@ public class CustomAdapter extends ArrayAdapter {
 
         TextView tv = (TextView) convertView.findViewById(R.id.home_item_text);
         tv.setText(((PersonalObject)getItem(position)).getName());
+        Toast.makeText(context, "Ciao", Toast.LENGTH_SHORT).show();
 
         return convertView;
     }

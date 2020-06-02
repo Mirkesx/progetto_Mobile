@@ -9,6 +9,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.marco_cavalli.lost_and_found.R;
+import com.marco_cavalli.lost_and_found.objects.PersonalObject;
 import com.marco_cavalli.lost_and_found.objects.User;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -53,6 +54,10 @@ public class Dashboard extends AppCompatActivity {
         return user;
     }
 
+    public String getUID() {
+        return uid;
+    }
+
     public void setUser(String uid) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference();
@@ -71,7 +76,8 @@ public class Dashboard extends AppCompatActivity {
                     if(((Map) data.get(uid)).get("birthday") != null)
                         birthday = ((Map) data.get(uid)).get("birthday").toString();
                     int number_objects = Integer.parseInt(((Map) data.get(uid)).get("number_objects").toString());
-                    user = new User(userID, displayName, email, gender, city, birthday, number_objects);
+                    Map<String, PersonalObject> objs = ((Map<String, PersonalObject>) ((Map)data.get(uid)).get("objs"));
+                    user = new User(userID, displayName, email, gender, city, birthday, number_objects, objs);
                 }
             }
 
@@ -79,6 +85,6 @@ public class Dashboard extends AppCompatActivity {
             public void onCancelled(DatabaseError databaseError) {
             }
         };
-        myRef.child("users").addListenerForSingleValueEvent(userListener);
+        myRef.child("users").addValueEventListener(userListener);
     }
 }

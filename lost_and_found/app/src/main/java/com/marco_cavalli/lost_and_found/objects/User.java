@@ -1,9 +1,9 @@
 package com.marco_cavalli.lost_and_found.objects;
-
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.IgnoreExtraProperties;
 import com.marco_cavalli.lost_and_found.R;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @IgnoreExtraProperties
 public class User {
@@ -15,6 +15,7 @@ public class User {
     private String city;
     private String birthday;
     private int number_objects;
+    private Map<String,PersonalObject> objs;
 
     public User(String userID, String displayName, String email) {
         this.userID = userID;
@@ -24,6 +25,7 @@ public class User {
         this.city = "";
         this.birthday ="";
         this.number_objects = 0;
+        this.objs = new HashMap<>();
     }
 
     public User(String userID, String displayName, String email, int gender, String city, String birthday, int number_objects) {
@@ -34,6 +36,26 @@ public class User {
         this.city = city;
         this.birthday = birthday;
         this.number_objects = number_objects;
+        this.objs = new HashMap<>();
+    }
+
+    public User(String userID, String displayName, String email, int gender, String city, String birthday, int number_objects, Map<String,PersonalObject> objs) {
+        this.userID = userID;
+        this.displayName = displayName;
+        this.email = email;
+        this.gender = gender;
+        this.city = city;
+        this.birthday = birthday;
+        this.number_objects = number_objects;
+        this.objs = objs;
+    }
+
+    public Map<String, PersonalObject> getObjs() {
+        return objs;
+    }
+
+    public void setObjs(Map<String, PersonalObject> objs) {
+        this.objs = objs;
     }
 
     public int getNumber_objects() {
@@ -96,13 +118,8 @@ public class User {
         this.userID = userID;
     }
 
-    public String updateNumberObjects() {
+    public int updateNumberObjects() {
         this.number_objects++;
-
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference();
-        myRef.child("users").child(this.userID).setValue(this);
-
-        return ""+(this.number_objects-1);
+        return (this.number_objects-1);
     }
 }

@@ -22,6 +22,7 @@ public class CreateObject extends Activity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.home_create_object);
 
         //ELEMENTS
         name = findViewById(R.id.home_create_name_edit);
@@ -33,7 +34,7 @@ public class CreateObject extends Activity {
 
         //LISTENERS
         create.setOnClickListener(v -> {
-            if(name.getText() != null || name.getText().toString().length() > 0) {
+            if(name.getText() == null || name.getText().toString().length() > 0) {
                 Intent data = new Intent();
                 data.putExtra("name",name.getText().toString());
                 if(description.getText() != null)

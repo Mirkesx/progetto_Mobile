@@ -2,18 +2,19 @@ package com.marco_cavalli.lost_and_found.objects;
 
 import android.media.Image;
 
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class PersonalObject {
     Image icon;
-    ArrayList<Position> positions;
+    Map<String,Position> positions;
     String object_id, name, description;
 
     public PersonalObject(Image icon, String name, String object_id) {
         this.icon = icon;
         this.name = name;
         this.description = "";
-        this.positions = new ArrayList<>();
+        this.positions = new HashMap<>();
         this.object_id = object_id;
     }
 
@@ -21,11 +22,11 @@ public class PersonalObject {
         this.icon = icon;
         this.name = name;
         this.description = description;
-        this.positions = new ArrayList<>();
+        this.positions = new HashMap<>();
         this.object_id = object_id;
     }
 
-    public PersonalObject(Image icon, String name, ArrayList<Position> positions, String object_id) {
+    public PersonalObject(Image icon, String name, Map<String,Position> positions, String object_id) {
         this.icon = icon;
         this.name = name;
         this.description = "";
@@ -33,7 +34,7 @@ public class PersonalObject {
         this.object_id = object_id;
     }
 
-    public PersonalObject(Image icon, String name, String description, ArrayList<Position> positions, String object_id) {
+    public PersonalObject(Image icon, String name, String description, Map<String,Position> positions, String object_id) {
         this.icon = icon;
         this.name = name;
         this.description = description;
@@ -49,11 +50,11 @@ public class PersonalObject {
         this.description = description;
     }
 
-    public ArrayList<Position> getPositions() {
+    public Map<String,Position> getPositions() {
         return positions;
     }
 
-    public void setPositions(ArrayList<Position> positions) {
+    public void setPositions(Map<String,Position> positions) {
         this.positions = positions;
     }
 
@@ -79,5 +80,8 @@ public class PersonalObject {
 
     public void setObject_id(String object_id) {
         this.object_id = object_id;
+    }
+
+    public PersonalObject() {
     }
 }

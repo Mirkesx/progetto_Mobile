@@ -10,6 +10,9 @@ public class Position {
         this.description = description;
     }
 
+    public Position() {
+    }
+
     public Position(Double latitude, Double longitude, String date, String description) {
         this.latitude = latitude;
         this.longitude = longitude;

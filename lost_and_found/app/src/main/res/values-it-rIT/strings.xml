@@ -19,4 +19,10 @@
     <string name="CalendarTag">Calendario</string>
     <string name="pick_gender">Scegli il genere</string>
     <string name="home_new_object">Aggiungi un oggetto</string>
+    <string name="object_description_hint">Aggiungi una descrizione</string>
+    <string name="object_description">Descrizione dell\'oggetto</string>
+    <string name="object_name_hint">Aggiungi il nome dell\'oggetto</string>
+    <string name="object_name">Nome dell\'oggetto</string>
+    <string name="home_create_button">Crea</string>
+    <string name="home_create_missing_name">Devi indicare un nome!</string>
 </resources>

@@ -41,6 +41,9 @@
 
         <activity
             android:name="com.marco_cavalli.lost_and_found.ui.base.Dashboard" />
+
+        <activity
+            android:name="com.marco_cavalli.lost_and_found.ui.home.CreateObject" />
     </application>
 
     <uses-permission android:name="android.permission.INTERNET"/>
