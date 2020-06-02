@@ -54,6 +54,17 @@ public class PersonalObject {
         return positions;
     }
 
+    @Override
+    public String toString() {
+        return "PersonalObject{" +
+                "icon=" + icon +
+                ", positions=" + positions +
+                ", object_id='" + object_id + '\'' +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                '}';
+    }
+
     public void setPositions(Map<String,Position> positions) {
         this.positions = positions;
     }

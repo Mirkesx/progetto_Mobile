@@ -1,7 +1,9 @@
 package com.marco_cavalli.lost_and_found.ui.home;
 
 import android.app.Activity;
+import android.app.Person;
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +27,7 @@ import com.marco_cavalli.lost_and_found.objects.User;
 import com.marco_cavalli.lost_and_found.ui.base.Dashboard;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -81,7 +84,7 @@ public class HomeFragment extends Fragment {
             PersonalObject obj = new PersonalObject(null, name, description, ""+user.updateNumberObjects());
 
             user.getObjs().put(""+obj.getObject_id(),obj);
-            objects = new ArrayList<>(user.getObjs().values());
+            objects.add(obj);
 
             DatabaseReference myRef = database.getReference();
             myRef.child("users").child(user.getUserID()).setValue(user);
@@ -94,12 +97,21 @@ public class HomeFragment extends Fragment {
         ValueEventListener userListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Map<String,Object> data = ((Map<String,Object>) dataSnapshot.getValue());
+                Map<String, ?> data = ((Map<String,Object>) dataSnapshot.getValue());
                 if(data != null && data.get(uid) != null) {
-                    Map<String, PersonalObject> tmp = ((Map<String,PersonalObject>) ((Map<String,User>)data.get(uid)).get("objs"));
-                    objects = new ArrayList<>(tmp.values());
-                    customAdapter.notifyDataSetChanged();
-                    Toast.makeText(getActivity(), ""+objects.size(), Toast.LENGTH_SHORT).show();
+                    data = ((Map<String, ?>) data.get(uid));
+                    if(data != null && data.get("objs") != null) {
+                        objects.clear();
+                        for(Map.Entry<String, ?> entry : ((Map<String, ?>) data.get("objs")).entrySet()) {
+                            Image icon = null;
+                            String name = ((Map) entry.getValue()).get("name").toString();
+                            String description = ((Map) entry.getValue()).get("description").toString();
+                            String object_id = ((Map) entry.getValue()).get("object_id").toString();
+                            PersonalObject po = new PersonalObject(icon, name, description, object_id);
+                            objects.add(po);
+                        }
+                        customAdapter.notifyDataSetChanged();
+                    }
                 }
             }
 
