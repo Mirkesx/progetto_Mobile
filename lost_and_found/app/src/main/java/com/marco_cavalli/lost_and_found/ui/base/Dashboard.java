@@ -1,4 +1,4 @@
-package com.marco_cavalli.lost_and_found;
+package com.marco_cavalli.lost_and_found.ui.base;
 
 import android.os.Bundle;
 
@@ -8,6 +8,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.marco_cavalli.lost_and_found.R;
 import com.marco_cavalli.lost_and_found.objects.User;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -69,7 +70,8 @@ public class Dashboard extends AppCompatActivity {
                         city = ((Map) data.get(uid)).get("city").toString();
                     if(((Map) data.get(uid)).get("birthday") != null)
                         birthday = ((Map) data.get(uid)).get("birthday").toString();
-                    user = new User(userID, displayName, email, gender, city, birthday);
+                    int number_objects = Integer.parseInt(((Map) data.get(uid)).get("number_objects").toString());
+                    user = new User(userID, displayName, email, gender, city, birthday, number_objects);
                 }
             }
 

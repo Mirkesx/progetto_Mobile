@@ -1,4 +1,4 @@
-package com.marco_cavalli.lost_and_found;
+package com.marco_cavalli.lost_and_found.ui.profile;
 
 import android.app.Activity;
 import android.os.Bundle;

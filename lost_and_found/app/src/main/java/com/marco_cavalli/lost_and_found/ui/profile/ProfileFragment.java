@@ -11,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -23,18 +22,14 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.marco_cavalli.lost_and_found.Dashboard;
-import com.marco_cavalli.lost_and_found.LoginScreen;
+import com.marco_cavalli.lost_and_found.ui.base.Dashboard;
+import com.marco_cavalli.lost_and_found.ui.login.LoginScreen;
 import com.marco_cavalli.lost_and_found.R;
 import com.marco_cavalli.lost_and_found.objects.User;
 
-import org.w3c.dom.Text;
-
-import java.text.BreakIterator;
 import java.util.Calendar;
 
 public class ProfileFragment extends Fragment {
-    //private ProfileViewModel profileViewModel;
     private String signInMethod;
     private User user;
 
@@ -56,7 +51,6 @@ public class ProfileFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         signInMethod = ((Dashboard)getActivity()).getSignInMethod();
         user = ((Dashboard) getActivity()).getUser();
-        //profileViewModel = ViewModelProviders.of(this).get(ProfileViewModel.class);
         View root = inflater.inflate(R.layout.fragment_profile, container, false);
 
         id_gender = user.getGender();

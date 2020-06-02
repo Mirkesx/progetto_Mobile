@@ -6,20 +6,40 @@ import com.marco_cavalli.lost_and_found.R;
 @IgnoreExtraProperties
 public class User {
 
-    public String userID;
-    public String displayName;
-    public String email;
-    public int gender;
-    public String city;
-    public String birthday;
+    private String userID;
+    private String displayName;
+    private String email;
+    private int gender;
+    private String city;
+    private String birthday;
+    private int number_objects;
 
-    public User(String userID, String displayName, String email, int gender, String city, String birthday) {
+    public User(String userID, String displayName, String email) {
+        this.userID = userID;
+        this.displayName = displayName;
+        this.email = email;
+        this.gender = R.string.gender_not_specified;
+        this.city = "";
+        this.birthday ="";
+        this.number_objects = 0;
+    }
+
+    public User(String userID, String displayName, String email, int gender, String city, String birthday, int number_objects) {
         this.userID = userID;
         this.displayName = displayName;
         this.email = email;
         this.gender = gender;
         this.city = city;
         this.birthday = birthday;
+        this.number_objects = number_objects;
+    }
+
+    public int getNumber_objects() {
+        return number_objects;
+    }
+
+    public void setNumber_objects(int number_objects) {
+        this.number_objects = number_objects;
     }
 
     public int getGender() {
@@ -72,14 +92,5 @@ public class User {
 
     public void setUserID(String userID) {
         this.userID = userID;
-    }
-
-    public User(String userID, String displayName, String email) {
-        this.userID = userID;
-        this.displayName = displayName;
-        this.email = email;
-        this.gender = R.string.gender_not_specified;
-        this.city = "";
-        this.birthday ="";
     }
 }

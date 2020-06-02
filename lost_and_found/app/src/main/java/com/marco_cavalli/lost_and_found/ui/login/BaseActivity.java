@@ -1,4 +1,4 @@
-package com.marco_cavalli.lost_and_found;
+package com.marco_cavalli.lost_and_found.ui.login;
 
 import androidx.appcompat.app.AppCompatActivity;
 
