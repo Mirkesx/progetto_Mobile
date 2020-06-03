@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="example.javatpoint.com.optionmenu.MainActivity">
+
+    <item  android:id="@+id/home_show_menu_all_locations"
+        android:title="@string/home_all_locations"/>
+    <item  android:id="@+id/home_show_menu_edit"
+        android:title="@string/home_edit"/>
+    <item  android:id="@+id/home_show_menu_delete"
+        android:title="@string/home_delete"/>
+</menu>

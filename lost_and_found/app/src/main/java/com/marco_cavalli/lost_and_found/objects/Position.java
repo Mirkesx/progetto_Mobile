@@ -1,23 +1,61 @@
 package com.marco_cavalli.lost_and_found.objects;
 
+import java.util.Calendar;
+
 public class Position {
 
     Double latitude, longitude;
-    String date, description;
-
-    public Position(String date, String description) {
-        this.date = date;
-        this.description = description;
-    }
+    String date;
+    String description;
+    String pos_id;
 
     public Position() {
     }
 
-    public Position(Double latitude, Double longitude, String date, String description) {
+    public Position(String pos_id, String date, String description) {
+        this.pos_id = pos_id;
+        if(date != null)
+            this.date = date;
+        else
+            this.date = today();
+        this.description = description;
+        this.latitude = 0.0;
+        this.longitude = 0.0;
+    }
+
+    public Position(String pos_id, String description) {
+        this.pos_id = pos_id;
+        this.date = today();
+        this.description = description;
+        this.latitude = 0.0;
+        this.longitude = 0.0;
+    }
+
+    public Position(String pos_id, String description, Double latitude, Double longitude) {
+        this.pos_id = pos_id;
+        this.date = today();
+        this.description = description;
         this.latitude = latitude;
         this.longitude = longitude;
-        this.date = date;
+    }
+
+    public Position(String pos_id, String date, String description, Double latitude, Double longitude) {
+        this.pos_id = pos_id;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        if(date != null)
+            this.date = date;
+        else
+            this.date = today();
         this.description = description;
+    }
+
+    public String getPos_id() {
+        return pos_id;
+    }
+
+    public void setPos_id(String pos_id) {
+        this.pos_id = pos_id;
     }
 
     public String getDescription() {
@@ -56,5 +94,19 @@ public class Position {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    private String today() {
+        String d, m, y;
+        d = ""+Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+        m = ""+Calendar.getInstance().get(Calendar.MONTH);
+        y = ""+Calendar.getInstance().get(Calendar.YEAR);
+        if(d.length() == 1) {
+            d = "0"+d;
+        }
+        if(m.length() == 1) {
+            m = "0"+d;
+        }
+        return d+"/"+m+"/"+y;
     }
 }

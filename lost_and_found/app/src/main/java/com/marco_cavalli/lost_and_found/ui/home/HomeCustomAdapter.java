@@ -15,12 +15,12 @@ import com.marco_cavalli.lost_and_found.objects.PersonalObject;
 
 import java.util.ArrayList;
 
-public class CustomAdapter extends ArrayAdapter {
+public class HomeCustomAdapter extends ArrayAdapter {
 
     private final Context context;
     public ArrayList<PersonalObject> objs;
 
-    public CustomAdapter(@NonNull Context context, int resource, @NonNull ArrayList<PersonalObject> objects) {
+    public HomeCustomAdapter(@NonNull Context context, int resource, @NonNull ArrayList<PersonalObject> objects) {
         super(context, resource, objects);
         this.objs = objects;
         this.context = context;

@@ -44,12 +44,22 @@
             android:name="com.marco_cavalli.lost_and_found.ui.base.Dashboard" />
 
         <activity
-            android:theme="@style/AppTheme.NoActionBar"
+            android:theme="@style/AppTheme"
             android:name="com.marco_cavalli.lost_and_found.ui.home.CreateObject" />
 
         <activity
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:theme="@style/AppTheme"
             android:name="com.marco_cavalli.lost_and_found.ui.home.ShowObject" />
+
+        <activity
+            android:theme="@style/AppTheme"
+            android:label="@string/home_all_locations_title"
+            android:name="com.marco_cavalli.lost_and_found.ui.home.ShowPositions" />
+
+        <activity
+            android:theme="@style/AppTheme"
+            android:label="@string/home_all_locations_title"
+            android:name="com.marco_cavalli.lost_and_found.ui.home.CreatePosition" />
     </application>
 
     <uses-permission android:name="android.permission.INTERNET"/>

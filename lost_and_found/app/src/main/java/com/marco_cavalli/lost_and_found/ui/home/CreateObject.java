@@ -10,7 +10,6 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
 import com.marco_cavalli.lost_and_found.R;
 
@@ -20,7 +19,6 @@ public class CreateObject extends AppCompatActivity {
     private EditText description;
     private ImageView camera, gallery, image;
     private Button create;
-    private Toolbar myToolbar;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -35,7 +33,7 @@ public class CreateObject extends AppCompatActivity {
         camera = findViewById(R.id.home_create_camera);
         gallery = findViewById(R.id.home_create_gallery);
         create = findViewById(R.id.home_create_button);
-        myToolbar = findViewById(R.id.home_create_toolbar);
+        setTitle(getString(R.string.home_create_toolbar_title));
 
         //LISTENERS
         create.setOnClickListener(v -> {

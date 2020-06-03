@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -34,7 +33,7 @@ public class HomeFragment extends Fragment {
     private Button buttonAdd;
     final static int RC_CREATE = 21;
     final static int RC_SHOW = 22;
-    private CustomAdapter customAdapter;
+    private HomeCustomAdapter homeCustomAdapter;
     private ArrayList<PersonalObject> objects;
     private FirebaseDatabase database;
     private String uid;
@@ -53,11 +52,14 @@ public class HomeFragment extends Fragment {
         //CUSTOM ADAPTER
         int resID = R.layout.home_custom_list_item;
         objects = new ArrayList<>();
-        customAdapter = new CustomAdapter(getActivity(), resID, objects);
-        list.setAdapter(customAdapter);
+        homeCustomAdapter = new HomeCustomAdapter(getActivity(), resID, objects);
+        list.setAdapter(homeCustomAdapter);
 
         list.setOnItemClickListener((parent, view, position, id) -> {
             Intent intent = new Intent(getActivity(), ShowObject.class);
+            intent.putExtra("object_id", objects.get(position).getObject_id());
+            intent.putExtra("name", objects.get(position).getName());
+            intent.putExtra("uid", uid);
             startActivityForResult(intent, RC_SHOW);
         });
 
@@ -91,7 +93,13 @@ public class HomeFragment extends Fragment {
 
             DatabaseReference myRef = database.getReference();
             myRef.child("users").child(user.getUserID()).setValue(user);
-            customAdapter.notifyDataSetChanged();
+            homeCustomAdapter.notifyDataSetChanged();
+        } else if(requestCode == RC_SHOW && resultCode == Activity.RESULT_OK) {
+            String obj_id = data.getStringExtra("object_id");
+            DatabaseReference myRef = database.getReference();
+            myRef.child("users").child(uid).child("objs").child(obj_id).setValue(null);
+
+            getOBJS();
         }
     }
 
@@ -113,7 +121,7 @@ public class HomeFragment extends Fragment {
                             PersonalObject po = new PersonalObject(icon, name, description, object_id);
                             objects.add(po);
                         }
-                        customAdapter.notifyDataSetChanged();
+                        homeCustomAdapter.notifyDataSetChanged();
                     }
                 }
             }

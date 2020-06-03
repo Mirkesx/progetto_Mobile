@@ -42,4 +42,19 @@
     <string name="home_create_button">Create</string>
     <string name="home_create_missing_name">Must set a name!</string>
     <string name="home_create_toolbar_title">Create a new object</string>
+    <string name="home_show_last_position_title">Last known position</string>
+    <string name="home_show_last_position_description">Description</string>
+    <string name="home_show_last_position_description_hint">Add a description about the location</string>
+    <string name="home_edit">Edit</string>
+    <string name="home_delete">Delete</string>
+    <string name="home_all_locations">Show positions list</string>
+    <string name="home_all_locations_title">Positions</string>
+    <string name="home_all_locations_delete">Delete all</string>
+    <string name="home_show_add">Update last known position</string>
+    <string name="new_position_description">Description of the location</string>
+    <string name="new_position_date">Date</string>
+    <string name="new_position_latlon">Coordinates</string>
+    <string name="new_position_gps">Use GPS</string>
+    <string name="new_position_submit">Add a new position</string>
+    <string name="new_position_description_hint">Add a description about the location</string>
 </resources>
