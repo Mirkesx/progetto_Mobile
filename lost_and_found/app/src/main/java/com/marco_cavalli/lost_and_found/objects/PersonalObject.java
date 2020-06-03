@@ -95,13 +95,4 @@ public class PersonalObject {
 
     public PersonalObject() {
     }
-
-    public Position getLastPosition() {
-        int last_position = positions.keySet().size()-1;
-        if(last_position >= 0) {
-            String lastKey = positions.keySet().toArray()[last_position].toString();
-            return positions.get(lastKey);
-        }
-        return null;
-    }
 }

@@ -26,6 +26,7 @@ import com.marco_cavalli.lost_and_found.objects.PersonalObject;
 import com.marco_cavalli.lost_and_found.objects.Position;
 import com.marco_cavalli.lost_and_found.ui.base.Dashboard;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,6 +43,7 @@ public class ShowObject extends AppCompatActivity {
     private FirebaseDatabase database;
     private ImageButton mapView;
     private Button updatePosition;
+    private Position lastPosition;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -67,11 +69,10 @@ public class ShowObject extends AppCompatActivity {
         setTitle(name);
 
         mapView.setOnClickListener(v -> {
-            Position pos = obj.getLastPosition();
             // Create a Uri from an intent string. Use the result to create an Intent.
             Uri gmmIntentUri;
-            if(pos != null)
-                gmmIntentUri = Uri.parse("geo:0,0?q="+pos.getLatitude()+","+pos.getLongitude()+"("+obj.getName()+")");
+            if(lastPosition != null)
+                gmmIntentUri = Uri.parse("geo:0,0?q="+lastPosition.getLatitude()+","+lastPosition.getLongitude()+"("+obj.getName()+")");
             else
                 gmmIntentUri = Uri.parse("geo:0,0?q=-33.8666,151.1957(Google+Sydney)");
 
@@ -155,11 +156,29 @@ public class ShowObject extends AppCompatActivity {
     private void setValues() {
         nameView.setText(obj.getName());
         descriptionView.setText(obj.getDescription());
-        Position pos = obj.getLastPosition();
-        if(pos != null) {
-            findViewById(R.id.home_show_last_position_container).setVisibility(View.VISIBLE);
-            lastpositionView.setText(pos.getDescription());
-        }
+
+        DatabaseReference myRef = database.getReference();
+        ValueEventListener userListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Map<String, ?> data = ((Map<String,Object>) dataSnapshot.getValue());
+                if(data.get("lastPosition") != null) {
+                    String pos_id = data.get("lastPosition").toString();
+                    lastPosition = obj.getPositions().get(pos_id);
+                    findViewById(R.id.home_show_last_position_container).setVisibility(View.VISIBLE);
+                    lastpositionView.setText(lastPosition.getDescription());
+                }
+                else {
+                    lastPosition = null;
+                    findViewById(R.id.home_show_last_position_container).setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        };
+        myRef.child("users").child(uid).child("objs").child(object_id).addListenerForSingleValueEvent(userListener);
     }
 
     @Override
@@ -173,13 +192,15 @@ public class ShowObject extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == RC_SHOW_POSITIONS) {
-            getOBJS();
+        if(requestCode == RC_SHOW_POSITIONS && resultCode == Activity.RESULT_OK) {
+            DatabaseReference myRef = database.getReference();
+            obj.getPositions().clear();
+            myRef.child("users").child(uid).child("objs").child(object_id).setValue(obj);
             setValues();
         } else if(requestCode == RC_ADD_POSITION && resultCode == Activity.RESULT_OK) {
             String description = data.getStringExtra("description");
             String date = data.getStringExtra("date");
-            String pos_id = uid+date.replace("/","");
+            String pos_id = createPosID(date);
             Double latitude = Double.parseDouble(data.getStringExtra("latitude"));
             Double longitude = Double.parseDouble(data.getStringExtra("longitude"));
             Position pos = new Position(pos_id,date,description,latitude,longitude);
@@ -188,8 +209,14 @@ public class ShowObject extends AppCompatActivity {
 
             DatabaseReference myRef = database.getReference();
             myRef.child("users").child(uid).child("objs").child(object_id).setValue(obj);
+            myRef.child("users").child(uid).child("objs").child(object_id).child("lastPosition").setValue(pos_id);
             setValues();
         }
+    }
+
+    private String createPosID(String date) {
+        String arr_str[] = date.split("/");
+        return uid+arr_str[2]+arr_str[1]+arr_str[0]+ Calendar.getInstance().get(Calendar.HOUR)+Calendar.getInstance().get(Calendar.MINUTE)+Calendar.getInstance().get(Calendar.SECOND);
     }
 
     @Override

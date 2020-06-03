@@ -1,11 +1,14 @@
 package com.marco_cavalli.lost_and_found.ui.home;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -63,7 +66,12 @@ public class ShowPositions extends AppCompatActivity {
         return true;
     }
 
-    
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        setResult(Activity.RESULT_OK);
+        finish();
+        return true;
+    }
 
     private void getOBJS() {
         DatabaseReference myRef = database.getReference();
