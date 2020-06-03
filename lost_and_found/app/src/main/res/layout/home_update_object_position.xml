@@ -95,14 +95,14 @@
                     android:id="@+id/new_position_latlon_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:style="?android:attr/buttonBarButtonStyle"
+                    style="?android:attr/buttonBarButtonStyle"
                     android:layout_weight="1"
                     android:text="@string/new_position_gps" />
             </LinearLayout>
 
             <Button
                 android:id="@+id/new_position_submit"
-                android:style="?android:attr/buttonBarButtonStyle"
+                style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/new_position_submit" />

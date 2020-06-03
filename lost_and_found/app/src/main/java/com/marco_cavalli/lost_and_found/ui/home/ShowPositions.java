@@ -63,13 +63,14 @@ public class ShowPositions extends AppCompatActivity {
         return true;
     }
 
+    
+
     private void getOBJS() {
         DatabaseReference myRef = database.getReference();
         ValueEventListener userListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Map<String, ?> data = ((Map<String,Object>) dataSnapshot.getValue());
-                Toast.makeText(ShowPositions.this, ""+data, Toast.LENGTH_SHORT).show();
                 if(data != null && data.get("positions") != null) {
                     positions.clear();
                     for(Map.Entry<String, ?> entry : ((Map<String, ?>) data.get("positions")).entrySet()) {

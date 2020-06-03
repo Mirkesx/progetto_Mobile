@@ -180,8 +180,8 @@ public class ShowObject extends AppCompatActivity {
             String description = data.getStringExtra("description");
             String date = data.getStringExtra("date");
             String pos_id = uid+date.replace("/","");
-            Double latitude = Double.parseDouble(data.getStringExtra("description"));
-            Double longitude = Double.parseDouble(data.getStringExtra("description"));
+            Double latitude = Double.parseDouble(data.getStringExtra("latitude"));
+            Double longitude = Double.parseDouble(data.getStringExtra("longitude"));
             Position pos = new Position(pos_id,date,description,latitude,longitude);
 
             obj.getPositions().put(pos_id,pos);
