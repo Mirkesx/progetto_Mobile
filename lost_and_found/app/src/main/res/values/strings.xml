@@ -57,4 +57,5 @@
     <string name="new_position_gps">Use GPS</string>
     <string name="new_position_submit">Add a new position</string>
     <string name="new_position_description_hint">Add a description about the location</string>
+    <string name="new_position_create">Update position</string>
 </resources>
