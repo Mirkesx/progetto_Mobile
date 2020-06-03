@@ -7,22 +7,23 @@
     android:layout_height="match_parent">
 
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/home_create_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
-        android:theme="?attr/actionBarTheme"
+        android:background="@color/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:title="@string/home_create_toolbar_title" />
+        app:title="@string/home_create_toolbar_title"
+        app:titleTextColor="@color/grey_100" />
 
     <ScrollView
         android:id="@+id/scrollView2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingTop="?attr/actionBarSize"
+        tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="48dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -36,11 +37,11 @@
                 android:layout_marginTop="64dp"
                 android:layout_marginBottom="22dp"
                 android:contentDescription="TODO"
-                android:src="@drawable/ic_baseline_insert_photo_128"
                 app:layout_constraintBottom_toTopOf="@+id/linearLayout"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_baseline_insert_photo_128" />
 
             <ImageView
                 android:id="@+id/home_create_camera"
@@ -50,12 +51,12 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="15dp"
                 android:layout_marginBottom="8dp"
-                android:src="@drawable/ic_baseline_camera_alt_48"
                 app:layout_constraintBottom_toTopOf="@+id/home_create_image"
                 app:layout_constraintEnd_toStartOf="@+id/home_create_gallery"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0" />
+                app:layout_constraintVertical_bias="0.0"
+                app:srcCompat="@drawable/ic_baseline_camera_alt_48" />
 
             <ImageView
                 android:id="@+id/home_create_gallery"
@@ -65,12 +66,12 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="152dp"
                 android:layout_marginBottom="8dp"
-                android:src="@drawable/ic_baseline_photo_library_48"
                 app:layout_constraintBottom_toTopOf="@+id/home_create_image"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/home_create_camera"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0" />
+                app:layout_constraintVertical_bias="0.0"
+                app:srcCompat="@drawable/ic_baseline_photo_library_48" />
 
             <LinearLayout
                 android:id="@+id/linearLayout"

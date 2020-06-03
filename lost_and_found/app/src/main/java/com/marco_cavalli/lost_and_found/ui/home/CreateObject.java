@@ -7,13 +7,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.marco_cavalli.lost_and_found.R;
 
-public class CreateObject extends Activity {
+public class CreateObject extends AppCompatActivity {
 
     private EditText name;
     private EditText description;

@@ -28,6 +28,7 @@
             android:name="com.facebook.FacebookActivity"
             android:configChanges= "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name" />
+
         <activity
             android:name="com.facebook.CustomTabActivity"
             android:exported="true">
@@ -43,7 +44,7 @@
             android:name="com.marco_cavalli.lost_and_found.ui.base.Dashboard" />
 
         <activity
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:theme="@style/AppTheme.NoActionBar"
             android:name="com.marco_cavalli.lost_and_found.ui.home.CreateObject" />
 
         <activity

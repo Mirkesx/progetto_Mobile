@@ -23,7 +23,7 @@
                 android:layout_marginTop="64dp"
                 android:layout_marginBottom="22dp"
                 android:contentDescription="TODO"
-                android:src="@drawable/ic_baseline_insert_photo_128"
+                app:srcCompat="@drawable/ic_baseline_insert_photo_128"
                 app:layout_constraintBottom_toTopOf="@+id/linearLayout"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

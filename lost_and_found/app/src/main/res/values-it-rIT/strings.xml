@@ -25,4 +25,5 @@
     <string name="object_name">Nome dell\'oggetto</string>
     <string name="home_create_button">Crea</string>
     <string name="home_create_missing_name">Devi indicare un nome!</string>
+    <string name="home_create_toolbar_title">Creazione di un nuovo oggetto</string>
 </resources>
