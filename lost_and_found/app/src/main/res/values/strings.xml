@@ -41,4 +41,5 @@
     <string name="object_name">Object\'s name</string>
     <string name="home_create_button">Create</string>
     <string name="home_create_missing_name">Must set a name!</string>
+    <string name="home_create_toolbar_title">Create a new object</string>
 </resources>

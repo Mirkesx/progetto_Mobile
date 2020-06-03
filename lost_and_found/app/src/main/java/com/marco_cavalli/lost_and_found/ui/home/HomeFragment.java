@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -32,6 +33,7 @@ public class HomeFragment extends Fragment {
     ListView list;
     private Button buttonAdd;
     final static int RC_CREATE = 21;
+    final static int RC_SHOW = 22;
     private CustomAdapter customAdapter;
     private ArrayList<PersonalObject> objects;
     private FirebaseDatabase database;
@@ -53,6 +55,11 @@ public class HomeFragment extends Fragment {
         objects = new ArrayList<>();
         customAdapter = new CustomAdapter(getActivity(), resID, objects);
         list.setAdapter(customAdapter);
+
+        list.setOnItemClickListener((parent, view, position, id) -> {
+            Intent intent = new Intent(getActivity(), ShowObject.class);
+            startActivityForResult(intent, RC_SHOW);
+        });
 
         //LISTENER BUTTON
         buttonAdd.setOnClickListener(v -> {

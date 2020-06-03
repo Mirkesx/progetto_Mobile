@@ -7,6 +7,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import androidx.annotation.Nullable;
 
@@ -18,11 +19,13 @@ public class CreateObject extends Activity {
     private EditText description;
     private ImageView camera, gallery, image;
     private Button create;
+    private Toolbar myToolbar;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_create_object);
+
 
         //ELEMENTS
         name = findViewById(R.id.home_create_name_edit);
@@ -31,6 +34,7 @@ public class CreateObject extends Activity {
         camera = findViewById(R.id.home_create_camera);
         gallery = findViewById(R.id.home_create_gallery);
         create = findViewById(R.id.home_create_button);
+        myToolbar = findViewById(R.id.home_create_toolbar);
 
         //LISTENERS
         create.setOnClickListener(v -> {
