@@ -1,7 +1,5 @@
 package com.marco_cavalli.lost_and_found.objects;
 
-import android.media.Image;
-
 import java.util.HashMap;
 import java.util.Map;
 

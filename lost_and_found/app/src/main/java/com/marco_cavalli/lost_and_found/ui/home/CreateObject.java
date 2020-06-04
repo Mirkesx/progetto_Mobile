@@ -2,7 +2,11 @@ package com.marco_cavalli.lost_and_found.ui.home;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -20,6 +24,8 @@ public class CreateObject extends AppCompatActivity {
     private ImageView camera, gallery, image;
     private Button create;
 
+    static final int REQUEST_IMAGE_CAPTURE = 1;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +40,8 @@ public class CreateObject extends AppCompatActivity {
         gallery = findViewById(R.id.home_create_gallery);
         create = findViewById(R.id.home_create_button);
         setTitle(getString(R.string.home_create_toolbar_title));
+
+        image.setImageDrawable(getResources().getDrawable(R.drawable.ic_baseline_insert_photo_128,null));
 
         //LISTENERS
         create.setOnClickListener(v -> {
@@ -51,5 +59,55 @@ public class CreateObject extends AppCompatActivity {
                 Toast.makeText(this, getString(R.string.home_create_missing_name), Toast.LENGTH_SHORT).show();
             }
         });
+
+        camera.setOnClickListener(v -> {
+            if(checkDeviceCompatibility()) {
+                dispatchTakePictureIntent();
+            }
+        });
     }
+
+    public boolean checkDeviceCompatibility() {
+
+        PackageManager pm = this.getPackageManager();
+
+        if (pm.hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)) {
+            if (pm.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
+                return true;
+            } else {
+                // use front camera
+                Toast.makeText(
+                        this,
+                        getString(R.string.camera_no_back_camera),
+                        Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        } else {
+            Toast.makeText(
+                    this,
+                    getString(R.string.camera_no_camera),
+                    Toast.LENGTH_SHORT).show();
+            return false;
+        }
+    }
+
+    private void dispatchTakePictureIntent() {
+        Log.d("CAMERA_TEST","Opening camera");
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode,resultCode,data);
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            image.setImageBitmap(imageBitmap);
+        }
+    }
+
+    
 }

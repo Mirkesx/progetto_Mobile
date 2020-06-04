@@ -67,4 +67,6 @@
     <string name="gps_no_provider">No Service Provider is available</string>
     <string name="gps_cant_be_used">To use this functionality you need to allow the app to use the GPS!</string>
     <string name="gps_not_available">GPS seems that is not available. Try again.</string>
+    <string name="camera_no_back_camera">This device does not have a back camera so it has automatically reverted to the front camera</string>
+    <string name="camera_no_camera">This device does not have any cameras.</string>
 </resources>

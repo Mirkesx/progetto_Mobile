@@ -111,9 +111,9 @@ public class ShowObject extends AppCompatActivity {
                         data = ((Map<String, ?>) data.get("objs"));
                         if(data != null && data.get(object_id) != null) {
                             data = ((Map<String, ?>) data.get(object_id));
-                            Image icon = null;
+                            String icon = null;
                             if(data.get("icon") != null)
-                                icon = ((Image) data.get("icon"));
+                                icon = data.get("icon").toString();
                             String name = data.get("name").toString();
                             String description = data.get("description").toString();
                             String object_id = data.get("object_id").toString();
