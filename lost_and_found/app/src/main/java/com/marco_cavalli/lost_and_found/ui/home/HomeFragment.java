@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,6 +26,7 @@ import com.marco_cavalli.lost_and_found.objects.User;
 import com.marco_cavalli.lost_and_found.ui.base.Dashboard;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Map;
 
 public class HomeFragment extends Fragment {
@@ -86,9 +88,10 @@ public class HomeFragment extends Fragment {
             user = ((Dashboard) getActivity()).getUser();
             String name = data.getStringExtra("name");
             String description = data.getStringExtra("description");
-            PersonalObject obj = new PersonalObject(null, name, description, ""+user.updateNumberObjects());
+            String object_id = getObject_id(name);
+            PersonalObject obj = new PersonalObject(null, name, description, object_id);
 
-            user.getObjs().put(""+obj.getObject_id(),obj);
+            user.getObjs().put(object_id,obj);
             objects.add(obj);
 
             DatabaseReference myRef = database.getReference();
@@ -103,6 +106,27 @@ public class HomeFragment extends Fragment {
         }
     }
 
+    private String getObject_id(String name) {
+        return name+today();
+    }
+
+    private String today() {
+        String d, m, y, h, min, s;
+        d = ""+ Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+        m = ""+Calendar.getInstance().get(Calendar.MONTH);
+        y = ""+Calendar.getInstance().get(Calendar.YEAR);
+        h = ""+Calendar.getInstance().get(Calendar.HOUR);
+        min = ""+Calendar.getInstance().get(Calendar.MINUTE);
+        s = ""+Calendar.getInstance().get(Calendar.SECOND);
+        if(d.length() == 1) {
+            d = "0"+m;
+        }
+        if(m.length() == 1) {
+            m = "0"+m;
+        }
+        return y+m+d+h+min+s;
+    }
+
     private void getOBJS() {
         DatabaseReference myRef = database.getReference();
         ValueEventListener userListener = new ValueEventListener() {
@@ -114,7 +138,7 @@ public class HomeFragment extends Fragment {
                     if(data != null && data.get("objs") != null) {
                         objects.clear();
                         for(Map.Entry<String, ?> entry : ((Map<String, ?>) data.get("objs")).entrySet()) {
-                            Image icon = null;
+                            String icon = null;
                             String name = ((Map) entry.getValue()).get("name").toString();
                             String description = ((Map) entry.getValue()).get("description").toString();
                             String object_id = ((Map) entry.getValue()).get("object_id").toString();

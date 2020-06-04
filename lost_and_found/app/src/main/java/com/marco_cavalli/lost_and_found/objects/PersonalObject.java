@@ -6,19 +6,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class PersonalObject {
-    Image icon;
+    String icon;
     Map<String,Position> positions;
     String object_id, name, description;
 
-    public PersonalObject(Image icon, String name, String object_id) {
-        this.icon = icon;
-        this.name = name;
-        this.description = "";
-        this.positions = new HashMap<>();
-        this.object_id = object_id;
+    public PersonalObject() {
     }
 
-    public PersonalObject(Image icon, String name, String description, String object_id) {
+    public PersonalObject(String icon, String name, String description, String object_id) {
         this.icon = icon;
         this.name = name;
         this.description = description;
@@ -26,15 +21,7 @@ public class PersonalObject {
         this.object_id = object_id;
     }
 
-    public PersonalObject(Image icon, String name, Map<String,Position> positions, String object_id) {
-        this.icon = icon;
-        this.name = name;
-        this.description = "";
-        this.positions = positions;
-        this.object_id = object_id;
-    }
-
-    public PersonalObject(Image icon, String name, String description, Map<String,Position> positions, String object_id) {
+    public PersonalObject(String icon, String name, String description, Map<String,Position> positions, String object_id) {
         this.icon = icon;
         this.name = name;
         this.description = description;
@@ -69,11 +56,11 @@ public class PersonalObject {
         this.positions = positions;
     }
 
-    public Image getIcon() {
+    public String getIcon() {
         return icon;
     }
 
-    public void setIcon(Image icon) {
+    public void setIcon(String icon) {
         this.icon = icon;
     }
 
@@ -93,6 +80,4 @@ public class PersonalObject {
         this.object_id = object_id;
     }
 
-    public PersonalObject() {
-    }
 }

@@ -18,6 +18,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class Dashboard extends AppCompatActivity {
@@ -75,9 +76,12 @@ public class Dashboard extends AppCompatActivity {
                         city = ((Map) data.get(uid)).get("city").toString();
                     if(((Map) data.get(uid)).get("birthday") != null)
                         birthday = ((Map) data.get(uid)).get("birthday").toString();
-                    int number_objects = Integer.parseInt(((Map) data.get(uid)).get("number_objects").toString());
-                    Map<String, PersonalObject> objs = ((Map<String, PersonalObject>) ((Map)data.get(uid)).get("objs"));
-                    user = new User(userID, displayName, email, gender, city, birthday, number_objects, objs);
+                    Map<String, PersonalObject> objs;
+                    if( ((Map)data.get(uid)).get("objs") != null)
+                        objs = ((Map<String, PersonalObject>) ((Map)data.get(uid)).get("objs"));
+                    else
+                        objs = new HashMap<>();
+                    user = new User(userID, displayName, email, gender, city, birthday, objs);
                 }
             }
 

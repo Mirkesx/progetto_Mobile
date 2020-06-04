@@ -9,34 +9,9 @@ public class Position {
     String description;
     String pos_id;
 
+    String icon;
+
     public Position() {
-    }
-
-    public Position(String pos_id, String date, String description) {
-        this.pos_id = pos_id;
-        if(date != null)
-            this.date = date;
-        else
-            this.date = today();
-        this.description = description;
-        this.latitude = 0.0;
-        this.longitude = 0.0;
-    }
-
-    public Position(String pos_id, String description) {
-        this.pos_id = pos_id;
-        this.date = today();
-        this.description = description;
-        this.latitude = 0.0;
-        this.longitude = 0.0;
-    }
-
-    public Position(String pos_id, String description, Double latitude, Double longitude) {
-        this.pos_id = pos_id;
-        this.date = today();
-        this.description = description;
-        this.latitude = latitude;
-        this.longitude = longitude;
     }
 
     public Position(String pos_id, String date, String description, Double latitude, Double longitude) {
@@ -48,6 +23,27 @@ public class Position {
         else
             this.date = today();
         this.description = description;
+        this.icon = null;
+    }
+
+    public Position(String pos_id, String date, String description, Double latitude, Double longitude, String icon) {
+        this.pos_id = pos_id;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        if(date != null)
+            this.date = date;
+        else
+            this.date = today();
+        this.description = description;
+        this.icon = null;
+    }
+
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
     }
 
     public String getPos_id() {

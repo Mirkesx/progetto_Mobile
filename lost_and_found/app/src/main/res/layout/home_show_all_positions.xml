@@ -7,7 +7,7 @@
     <ListView
         android:id="@+id/home_all_positions_list"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:divider="#000"
         android:dividerHeight="1dp"
         android:footerDividersEnabled="false">

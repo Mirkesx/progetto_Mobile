@@ -6,15 +6,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
-
-import com.codetroopers.betterpickers.calendardatepicker.CalendarDatePickerDialogFragment;
-
-import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,7 +28,7 @@ public class CreatePosition extends AppCompatActivity {
     private String object_id;
     private String uid;
     private EditText editDesc;
-    private TextView textDate, textLat, textLon, getGPS, updateButton;
+    private TextView textLat, textLon, getGPS, updateButton;
 
     private ArrayList permissionsToRequest;
     private ArrayList permissionsRejected = new ArrayList();
@@ -49,6 +42,19 @@ public class CreatePosition extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_update_object_position);
 
+        permissions.add(ACCESS_FINE_LOCATION);
+        permissions.add(ACCESS_COARSE_LOCATION);
+
+        permissionsToRequest = findUnAskedPermissions(permissions);
+        //get the permissions we have asked for before but are not granted..
+        //we will store this in a global list to access later.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+
+            if (permissionsToRequest.size() > 0)
+                requestPermissions((String[])permissionsToRequest.toArray(new String[permissionsToRequest.size()]), ALL_PERMISSIONS_RESULT);
+        }
+
         //Retrieving data
         Intent inte = getIntent();
         Bundle data = inte.getExtras();
@@ -57,13 +63,10 @@ public class CreatePosition extends AppCompatActivity {
 
         //Initialize elements
         editDesc = findViewById(R.id.new_position_description);
-        textDate = findViewById(R.id.new_position_date);
         textLat = findViewById(R.id.new_poition_lat);
         textLon = findViewById(R.id.new_position_lon);
         getGPS = findViewById(R.id.new_position_latlon_button);
         updateButton = findViewById(R.id.new_position_submit);
-
-        setDate(Calendar.getInstance().get(Calendar.DAY_OF_MONTH), Calendar.getInstance().get(Calendar.MONTH), Calendar.getInstance().get(Calendar.YEAR));
 
         updateButton.setOnClickListener(v -> {
             Intent data_intent = new Intent();
@@ -71,7 +74,7 @@ public class CreatePosition extends AppCompatActivity {
                 data_intent.putExtra("description", editDesc.getText().toString());
             else
                 data_intent.putExtra("description", "");
-            data_intent.putExtra("date", textDate.getText().toString());
+            data_intent.putExtra("date", today());
             if (textLat.getText().toString().length() > 0)
                 data_intent.putExtra("latitude", textLat.getText().toString());
             else
@@ -84,65 +87,40 @@ public class CreatePosition extends AppCompatActivity {
             finish();
         });
 
-        textDate.setOnClickListener(v -> {
-            String FRAG_TAG_DATE_PICKER = getString(R.string.CalendarTag);
-            String birthday = textDate.getText().toString();
-            int y, m, d;
-            if (birthday.length() > 0) {
-                String[] tmp = birthday.split("/");
-                d = Integer.parseInt(tmp[0]);
-                m = Integer.parseInt(tmp[1]) - 1;
-                y = Integer.parseInt(tmp[2]);
-            } else {
-                d = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
-                m = Calendar.getInstance().get(Calendar.MONTH);
-                y = Calendar.getInstance().get(Calendar.YEAR);
-            }
 
-            CalendarDatePickerDialogFragment cdp = new CalendarDatePickerDialogFragment()
-                    .setOnDateSetListener((dialog, year, monthOfYear, dayOfMonth) -> setDate(dayOfMonth, monthOfYear, year))
-                    .setFirstDayOfWeek(Calendar.SUNDAY)
-                    .setPreselectedDate(y, m, d)
-                    .setDoneText(getString(R.string.Confirm))
-                    .setCancelText(getString(R.string.Cancel))
-                    .setThemeLight();
-            cdp.show(getSupportFragmentManager(), FRAG_TAG_DATE_PICKER);
-        });
+        getGPS.setOnClickListener(view -> getCoordinates());
 
-        permissions.add(ACCESS_FINE_LOCATION);
-        permissions.add(ACCESS_COARSE_LOCATION);
-
-        permissionsToRequest = findUnAskedPermissions(permissions);
-        //get the permissions we have asked for before but are not granted..
-        //we will store this in a global list to access later.
-
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-
-
-            if (permissionsToRequest.size() > 0)
-                requestPermissions((String[])permissionsToRequest.toArray(new String[permissionsToRequest.size()]), ALL_PERMISSIONS_RESULT);
+        if ( getApplicationContext().checkSelfPermission(android.Manifest.permission.ACCESS_COARSE_LOCATION ) == PackageManager.PERMISSION_GRANTED  || getApplicationContext().checkSelfPermission(ACCESS_FINE_LOCATION ) == PackageManager.PERMISSION_GRANTED) {
+            getCoordinates();
         }
+    }
+
+    public void getCoordinates() {
+        permissionsToRequest = findUnAskedPermissions(permissions);
+        locationTrack = new LocationTrack(CreatePosition.this);
 
 
-        getGPS.setOnClickListener(view -> {
-
-            locationTrack = new LocationTrack(CreatePosition.this);
+        if (locationTrack.canGetLocation()) {
 
 
-            if (locationTrack.canGetLocation()) {
+            Double longitude = locationTrack.getLongitude();
+            Double latitude = locationTrack.getLatitude();
 
-
-                Double longitude = locationTrack.getLongitude();
-                Double latitude = locationTrack.getLatitude();
-
-                textLat.setText(""+ Math.floor(latitude*100)/100);
-                textLon.setText(""+Math.floor(longitude*100)/100);
-            } else {
-                locationTrack.showSettingsAlert();
+            if(latitude > 90 && longitude > 180) {
+                Toast.makeText(getApplicationContext(), getString(R.string.gps_not_available), Toast.LENGTH_LONG).show();
+                finish();
             }
 
-        });
+            textLat.setText(""+ latitude);
+            textLon.setText(""+longitude);
+        } else {
+            locationTrack.showSettingsAlert();
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
     }
 
     private ArrayList findUnAskedPermissions(ArrayList wanted) {
@@ -185,55 +163,38 @@ public class CreatePosition extends AppCompatActivity {
                 }
 
                 if (permissionsRejected.size() > 0) {
-
-
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        if (shouldShowRequestPermissionRationale((String)permissionsRejected.get(0))) {
-                            showMessageOKCancel("These permissions are mandatory for the application. Please allow access.",
-                                    new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                                                requestPermissions((String[])permissionsRejected.toArray(new String[permissionsRejected.size()]), ALL_PERMISSIONS_RESULT);
-                                            }
-                                        }
-                                    });
-                            return;
-                        }
-                    }
-
+                    Toast.makeText(getApplicationContext(), getString(R.string.gps_cant_be_used), Toast.LENGTH_LONG).show();
+                    finish();
+                } else {
+                    getCoordinates();
                 }
 
                 break;
         }
-
-    }
-
-    private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
-        new AlertDialog.Builder(CreatePosition.this)
-                .setMessage(message)
-                .setPositiveButton("OK", okListener)
-                .setNegativeButton("Cancel", null)
-                .create()
-                .show();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        locationTrack.stopListener();
+        if(locationTrack != null)
+            locationTrack.stopListener();
     }
 
 
-    private void setDate(int dayOfMonth, int monthOfYear, int year) {
-        String d = ""+dayOfMonth;
+    private String today() {
+        String d, m, y, h, min, s;
+        d = ""+ Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+        m = ""+Calendar.getInstance().get(Calendar.MONTH);
+        y = ""+Calendar.getInstance().get(Calendar.YEAR);
+        h = ""+Calendar.getInstance().get(Calendar.HOUR);
+        min = ""+Calendar.getInstance().get(Calendar.MINUTE);
+        s = ""+Calendar.getInstance().get(Calendar.SECOND);
         if(d.length() == 1) {
             d = "0"+d;
         }
-        String m = ""+(monthOfYear+1);
         if(m.length() == 1) {
             m = "0"+m;
         }
-        textDate.setText(d+"/"+m+"/"+year);
+        return d+"/"+m+"/"+y+" - "+h+":"+min+":"+s;
     }
 }

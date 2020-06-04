@@ -200,7 +200,7 @@ public class ShowObject extends AppCompatActivity {
         } else if(requestCode == RC_ADD_POSITION && resultCode == Activity.RESULT_OK) {
             String description = data.getStringExtra("description");
             String date = data.getStringExtra("date");
-            String pos_id = createPosID(date);
+            String pos_id = createPosID();
             Double latitude = Double.parseDouble(data.getStringExtra("latitude"));
             Double longitude = Double.parseDouble(data.getStringExtra("longitude"));
             Position pos = new Position(pos_id,date,description,latitude,longitude);
@@ -214,9 +214,21 @@ public class ShowObject extends AppCompatActivity {
         }
     }
 
-    private String createPosID(String date) {
-        String arr_str[] = date.split("/");
-        return uid+arr_str[2]+arr_str[1]+arr_str[0]+ Calendar.getInstance().get(Calendar.HOUR)+Calendar.getInstance().get(Calendar.MINUTE)+Calendar.getInstance().get(Calendar.SECOND);
+    private String createPosID() {
+        String d, m, y, h, min, s;
+        d = ""+ Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+        m = ""+Calendar.getInstance().get(Calendar.MONTH);
+        y = ""+Calendar.getInstance().get(Calendar.YEAR);
+        h = ""+Calendar.getInstance().get(Calendar.HOUR);
+        min = ""+Calendar.getInstance().get(Calendar.MINUTE);
+        s = ""+Calendar.getInstance().get(Calendar.SECOND);
+        if(d.length() == 1) {
+            d = "0"+d;
+        }
+        if(m.length() == 1) {
+            m = "0"+m;
+        }
+        return y+m+d+h+min+s;
     }
 
     @Override
