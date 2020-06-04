@@ -8,7 +8,6 @@ public class Position {
     String date;
     String description;
     String pos_id;
-
     String icon;
 
     public Position() {
@@ -23,7 +22,7 @@ public class Position {
         else
             this.date = today();
         this.description = description;
-        this.icon = null;
+        this.icon = "";
     }
 
     public Position(String pos_id, String date, String description, Double latitude, Double longitude, String icon) {
@@ -35,7 +34,7 @@ public class Position {
         else
             this.date = today();
         this.description = description;
-        this.icon = null;
+        this.icon = icon;
     }
 
     public String getIcon() {

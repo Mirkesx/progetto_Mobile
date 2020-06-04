@@ -1,10 +1,12 @@
 package com.marco_cavalli.lost_and_found.ui.home;
 
 import android.app.Activity;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,20 +14,29 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.marco_cavalli.lost_and_found.R;
 import com.marco_cavalli.lost_and_found.objects.PersonalObject;
 import com.marco_cavalli.lost_and_found.objects.Position;
 import com.marco_cavalli.lost_and_found.ui.base.Dashboard;
 
+import java.io.File;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -41,6 +52,7 @@ public class ShowObject extends AppCompatActivity {
     private ImageView imageView;
     private PersonalObject obj;
     private FirebaseDatabase database;
+    private FirebaseStorage storage;
     private ImageButton mapView;
     private Button updatePosition;
     private Position lastPosition;
@@ -59,6 +71,7 @@ public class ShowObject extends AppCompatActivity {
 
         //Initializing objects
         database = FirebaseDatabase.getInstance();
+        storage = FirebaseStorage.getInstance();
         nameView = findViewById(R.id.home_show_name_value);
         descriptionView = findViewById(R.id.home_show_description_value);
         lastpositionView = findViewById(R.id.home_show_last_position_description);
@@ -97,6 +110,24 @@ public class ShowObject extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         getOBJS();
+    }
+
+    private void setImageView() {
+        File file = new File(getFilesDir()+"/objects_images",obj.getIcon());
+        if(file.exists()) {
+            imageView.setImageURI(Uri.fromFile(file));
+        }
+        else {
+            StorageReference storageRef = storage.getReference();
+            StorageReference islandRef = storageRef.child("users/"+uid+"/objects_images/"+obj.getIcon());
+            File newFile = new File(getFilesDir()+"/objects_images",obj.getIcon());
+
+            islandRef.getFile(newFile).addOnSuccessListener(taskSnapshot -> {
+                imageView.setImageURI(Uri.fromFile(newFile));
+            }).addOnFailureListener(exception -> {
+                exception.printStackTrace();
+            });
+        }
     }
 
     private void getOBJS() {
@@ -139,6 +170,7 @@ public class ShowObject extends AppCompatActivity {
                                 }
                             }
                             obj = new PersonalObject(icon, name, description, positions, object_id);
+                            setImageView();
                         }
                     }
                 }
@@ -192,26 +224,68 @@ public class ShowObject extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == RC_SHOW_POSITIONS && resultCode == Activity.RESULT_OK) {
+        if(requestCode == RC_SHOW_POSITIONS && resultCode == Activity.RESULT_OK) { //when deleting all the positions
             DatabaseReference myRef = database.getReference();
             obj.getPositions().clear();
             myRef.child("users").child(uid).child("objs").child(object_id).setValue(obj);
             setValues();
-        } else if(requestCode == RC_ADD_POSITION && resultCode == Activity.RESULT_OK) {
-            String description = data.getStringExtra("description");
-            String date = data.getStringExtra("date");
-            String pos_id = createPosID();
-            Double latitude = Double.parseDouble(data.getStringExtra("latitude"));
-            Double longitude = Double.parseDouble(data.getStringExtra("longitude"));
-            Position pos = new Position(pos_id,date,description,latitude,longitude);
+        } else if(requestCode == RC_ADD_POSITION) { //update of last known position
+            if(resultCode == Activity.RESULT_OK) {
+                String description = data.getStringExtra("description");
+                String date = data.getStringExtra("date");
+                String pos_id = createPosID();
+                Double latitude = Double.parseDouble(data.getStringExtra("latitude"));
+                Double longitude = Double.parseDouble(data.getStringExtra("longitude"));
+                String icon = saveImage("position"+pos_id+"_image.jpg");
+                Position pos = new Position(pos_id,date,description,latitude,longitude, icon);
 
-            obj.getPositions().put(pos_id,pos);
+                obj.getPositions().put(pos_id,pos);
 
-            DatabaseReference myRef = database.getReference();
-            myRef.child("users").child(uid).child("objs").child(object_id).setValue(obj);
-            myRef.child("users").child(uid).child("objs").child(object_id).child("lastPosition").setValue(pos_id);
-            setValues();
+                DatabaseReference myRef = database.getReference();
+                myRef.child("users").child(uid).child("objs").child(object_id).setValue(obj);
+                myRef.child("users").child(uid).child("objs").child(object_id).child("lastPosition").setValue(pos_id);
+
+                if(!icon.equals(""))
+                    uploadFile(icon);
+
+                setValues();
+            } else {
+                File tmpFile=new File(getFilesDir()+"/tmp", "tmp.jpg");
+                if(tmpFile.exists()){
+                    tmpFile.delete();
+                }
+            }
         }
+    }
+
+    private void deleteFiles(String path) {
+        File file = new File(getFilesDir()+"/objects_positions",path);
+        if(file.exists()) {
+            file.delete();
+        }
+        StorageReference storageRef = storage.getReference();
+        StorageReference fileToDelete = storageRef.child("users/"+uid+"/objects_positions/"+path);
+
+        // Delete the file
+        fileToDelete.delete().addOnSuccessListener(aVoid -> {
+            Log.d("Deleting_file","Deleted "+ "users/"+uid+"/objects_positions/"+path);
+            getOBJS();
+        }).addOnFailureListener(exception -> {
+            exception.printStackTrace();
+        });
+    }
+
+    private void uploadFile(String path){
+        Uri file = Uri.fromFile(new File(getFilesDir()+"/objects_positions",path));
+        StorageReference storageRef = storage.getReference();
+        StorageReference riversRef = storageRef.child("users/"+uid+"/objects_positions/"+path);
+        UploadTask uploadTask = riversRef.putFile(file);
+
+        // Register observers to listen for when the download is done or if it fails
+        uploadTask.addOnFailureListener(exception -> {
+            exception.printStackTrace();
+            Log.d("UPLOAD_PHOTO","Fail");
+        }).addOnSuccessListener(taskSnapshot -> Log.d("UPLOAD_PHOTO","Success"));
     }
 
     private String createPosID() {
@@ -245,9 +319,35 @@ public class ShowObject extends AppCompatActivity {
         else if(item.getTitle().equals(getString(R.string.home_delete))) {
             Intent data = new Intent();
             data.putExtra("object_id", obj.getObject_id());
+            data.putExtra("icon", obj.getIcon());
             setResult(Activity.RESULT_OK, data);
             finish();
         }
         return true;
+    }
+
+    private String saveImage(String fileName) {
+        ContextWrapper cw = new ContextWrapper(this);
+        File tmpFile=new File(cw.getFilesDir()+"/tmp", "tmp.jpg");
+        if(!tmpFile.exists()){
+            return "";
+        }
+        Log.d("Image_management",tmpFile.toString());
+
+        File directory = new File(cw.getFilesDir(),"objects_positions");
+        if(!directory.exists()){
+            directory.mkdir();
+        }
+
+        File finalFile = new File(directory,fileName);
+        if(finalFile.exists()) {
+            finalFile.delete();
+        }
+
+        boolean success = tmpFile.renameTo(finalFile);
+        Log.d("Image_management","Moved "+tmpFile.toString());
+
+
+        return fileName;
     }
 }

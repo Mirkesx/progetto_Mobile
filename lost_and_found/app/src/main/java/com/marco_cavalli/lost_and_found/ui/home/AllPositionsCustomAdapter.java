@@ -13,9 +13,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.google.firebase.storage.StorageReference;
 import com.marco_cavalli.lost_and_found.R;
 import com.marco_cavalli.lost_and_found.objects.Position;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 

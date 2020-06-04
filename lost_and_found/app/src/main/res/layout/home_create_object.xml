@@ -34,7 +34,8 @@
                 app:layout_constraintHeight_max="250dp"
                 app:layout_constraintHeight_min="250dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_baseline_insert_photo_128"/>
 
             <ImageView
                 android:id="@+id/home_create_camera"
