@@ -1,9 +1,7 @@
 package com.marco_cavalli.lost_and_found.ui.home;
 
 import android.app.Activity;
-import android.content.ContextWrapper;
 import android.content.Intent;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,20 +12,16 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -45,6 +39,7 @@ public class ShowObject extends AppCompatActivity {
 
     private static final int RC_SHOW_POSITIONS = 23;
     private static final int RC_ADD_POSITION = 24;
+    private static final int RC_EDIT_OBJECT = 25;
     private String object_id;
     private String uid;
     private String name;
@@ -170,7 +165,8 @@ public class ShowObject extends AppCompatActivity {
                                 }
                             }
                             obj = new PersonalObject(icon, name, description, positions, object_id);
-                            setImageView();
+                            if(!obj.getIcon().equals(""))
+                                setImageView();
                         }
                     }
                 }
@@ -255,20 +251,59 @@ public class ShowObject extends AppCompatActivity {
                     tmpFile.delete();
                 }
             }
+        } else if(requestCode == RC_EDIT_OBJECT) { //object was edited
+            if(resultCode == Activity.RESULT_OK) {
+                String description = data.getStringExtra("description");
+                String name = data.getStringExtra("name");
+                String icon = data.getStringExtra("icon");
+
+                DatabaseReference myRef = database.getReference();
+                myRef = myRef.child("users").child(uid).child("objs").child(object_id);
+
+                if(!name.equals(obj.getName())) {
+                    obj.setName(name);
+                    nameView.setText(name);
+                    myRef.child("name").setValue(name);
+                }
+
+                if(!description.equals(obj.getDescription())) {
+                    obj.setDescription(description);
+                    descriptionView.setText(description);
+                    myRef.child("description").setValue(description);
+                }
+
+                File tmpFile=new File(getFilesDir()+"/tmp", "tmp.jpg");
+                if(tmpFile.exists()){
+                    String filename = saveImage(name+createPosID()+"_image.jpg");
+                    obj.setIcon(filename);
+                    myRef.child("icon").setValue(filename);
+                    uploadFile(filename);
+                    if(!icon.equals("")) {
+                        deleteIconFile(icon);
+                    }
+                    setImageView();
+                }
+            }
+            else {
+                File tmpFile=new File(getFilesDir()+"/tmp", "tmp.jpg");
+                if(tmpFile.exists()){
+                    tmpFile.delete();
+                }
+            }
         }
     }
 
-    private void deleteFiles(String path) {
-        File file = new File(getFilesDir()+"/objects_positions",path);
+    private void deleteIconFile(String path) {
+        File file = new File(getFilesDir()+"/objects_images",path);
         if(file.exists()) {
             file.delete();
         }
         StorageReference storageRef = storage.getReference();
-        StorageReference fileToDelete = storageRef.child("users/"+uid+"/objects_positions/"+path);
+        StorageReference fileToDelete = storageRef.child("users/"+uid+"/objects_images/"+path);
 
         // Delete the file
         fileToDelete.delete().addOnSuccessListener(aVoid -> {
-            Log.d("Deleting_file","Deleted "+ "users/"+uid+"/objects_positions/"+path);
+            Log.d("Deleting_file","Deleted "+ "users/"+uid+"/objects_images/"+path);
             getOBJS();
         }).addOnFailureListener(exception -> {
             exception.printStackTrace();
@@ -276,16 +311,18 @@ public class ShowObject extends AppCompatActivity {
     }
 
     private void uploadFile(String path){
-        Uri file = Uri.fromFile(new File(getFilesDir()+"/objects_positions",path));
-        StorageReference storageRef = storage.getReference();
-        StorageReference riversRef = storageRef.child("users/"+uid+"/objects_positions/"+path);
-        UploadTask uploadTask = riversRef.putFile(file);
+        if(!path.equals("")) {
+            Uri file = Uri.fromFile(new File(getFilesDir()+"/objects_images",path));
+            StorageReference storageRef = storage.getReference();
+            StorageReference riversRef = storageRef.child("users/"+uid+"/objects_images/"+path);
+            UploadTask uploadTask = riversRef.putFile(file);
 
-        // Register observers to listen for when the download is done or if it fails
-        uploadTask.addOnFailureListener(exception -> {
-            exception.printStackTrace();
-            Log.d("UPLOAD_PHOTO","Fail");
-        }).addOnSuccessListener(taskSnapshot -> Log.d("UPLOAD_PHOTO","Success"));
+            // Register observers to listen for when the download is done or if it fails
+            uploadTask.addOnFailureListener(exception -> {
+                exception.printStackTrace();
+                Log.d("UPLOAD_PHOTO","Fail");
+            }).addOnSuccessListener(taskSnapshot -> Log.d("UPLOAD_PHOTO","Success"));
+        }
     }
 
     private String createPosID() {
@@ -314,11 +351,14 @@ public class ShowObject extends AppCompatActivity {
             startActivityForResult(intent, RC_SHOW_POSITIONS);
         }
         else if(item.getTitle().equals(getString(R.string.home_edit))) {
-
+            Intent intent = new Intent(this,EditObject.class);
+            intent.putExtra("uid", uid);
+            intent.putExtra("object_id", object_id);
+            startActivityForResult(intent, RC_EDIT_OBJECT);
         }
         else if(item.getTitle().equals(getString(R.string.home_delete))) {
             Intent data = new Intent();
-            data.putExtra("object_id", obj.getObject_id());
+            data.putExtra("object_id", object_id);
             data.putExtra("icon", obj.getIcon());
             setResult(Activity.RESULT_OK, data);
             finish();
@@ -327,25 +367,28 @@ public class ShowObject extends AppCompatActivity {
     }
 
     private String saveImage(String fileName) {
-        ContextWrapper cw = new ContextWrapper(this);
-        File tmpFile=new File(cw.getFilesDir()+"/tmp", "tmp.jpg");
-        if(!tmpFile.exists()){
-            return "";
-        }
-        Log.d("Image_management",tmpFile.toString());
+        try {
+            File tmpFile=new File(getFilesDir()+"/tmp", "tmp.jpg");
+            if(!tmpFile.exists()){
+                return "";
+            }
+            Log.d("Image_management",tmpFile.toString());
 
-        File directory = new File(cw.getFilesDir(),"objects_positions");
-        if(!directory.exists()){
-            directory.mkdir();
-        }
+            File directory = new File(getFilesDir(),"objects_images");
+            if(!directory.exists()){
+                directory.mkdir();
+            }
 
-        File finalFile = new File(directory,fileName);
-        if(finalFile.exists()) {
-            finalFile.delete();
-        }
+            File finalFile = new File(directory,fileName);
+            if(finalFile.exists()) {
+                finalFile.delete();
+            }
 
-        boolean success = tmpFile.renameTo(finalFile);
-        Log.d("Image_management","Moved "+tmpFile.toString());
+            boolean success = tmpFile.renameTo(finalFile);
+            Log.d("Image_management","Moved "+tmpFile.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
 
         return fileName;

@@ -71,4 +71,6 @@
     <string name="camera_no_camera">This device does not have any cameras.</string>
     <string name="gallery_error">Something went wrong</string>
     <string name="gallery_no_selection">You haven\'t picked Image</string>
+    <string name="home_update_object">Edit</string>
+    <string name="home_edit_object">Edit of object</string>
 </resources>

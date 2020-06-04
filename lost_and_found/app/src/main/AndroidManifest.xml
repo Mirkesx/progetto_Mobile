@@ -63,6 +63,11 @@
             android:name="com.marco_cavalli.lost_and_found.ui.home.CreatePosition">
         </activity>
 
+        <activity
+            android:theme="@style/AppTheme"
+            android:name="com.marco_cavalli.lost_and_found.ui.home.EditObject">
+        </activity>
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.example.android.fileprovider"
