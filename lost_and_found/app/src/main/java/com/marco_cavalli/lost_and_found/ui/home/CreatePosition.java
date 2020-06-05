@@ -42,7 +42,8 @@ public class CreatePosition extends AppCompatActivity {
     private String object_id;
     private String uid;
     private EditText editDesc;
-    private TextView textLat, textLon, getGPS, updateButton;
+    private TextView textLat, textLon, updateButton;
+    private ImageView getGPS;
 
     private ArrayList permissionsToRequest;
     private ArrayList permissionsRejected = new ArrayList();
@@ -110,7 +111,17 @@ public class CreatePosition extends AppCompatActivity {
         });
 
 
-        getGPS.setOnClickListener(view -> getCoordinates());
+        getGPS.setOnClickListener(view -> {
+            getCoordinates();
+            Uri gmmIntentUri;
+            gmmIntentUri = Uri.parse("geo:0,0?q="+textLat.getText()+","+textLon.getText()+"()");
+            // Create an Intent from gmmIntentUri. Set the action to ACTION_VIEW
+            Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+            // Make the Intent explicit by setting the Google Maps package
+            mapIntent.setPackage("com.google.android.apps.maps");
+            // Attempt to start an activity that can handle the Intent
+            this.startActivity(mapIntent);
+        });
 
         if ( getApplicationContext().checkSelfPermission(android.Manifest.permission.ACCESS_COARSE_LOCATION ) == PackageManager.PERMISSION_GRANTED  || getApplicationContext().checkSelfPermission(ACCESS_FINE_LOCATION ) == PackageManager.PERMISSION_GRANTED) {
             getCoordinates();
