@@ -1,5 +1,4 @@
 package com.marco_cavalli.lost_and_found.ui.found_objects;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,11 +8,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.google.firebase.database.DataSnapshot;
@@ -25,19 +23,24 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.marco_cavalli.lost_and_found.R;
 import com.marco_cavalli.lost_and_found.custom_adapters.FoundCustomAdapter;
 import com.marco_cavalli.lost_and_found.objects.FoundItem;
+import com.marco_cavalli.lost_and_found.objects.PersonalObject;
+import com.marco_cavalli.lost_and_found.objects.User;
 import com.marco_cavalli.lost_and_found.ui.base.Dashboard;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 public class FoundFragment extends Fragment {
 
     private String uid;
+    private User user;
     private FirebaseDatabase database;
     private FirebaseStorage storage;
     private ArrayList<FoundItem> your_founds, others_founds;
     private ListView insertion_list;
     private FoundCustomAdapter your_ca, others_ca;
+    private final int RC_NEW_INSERTION = 10;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_found, container, false);
@@ -46,6 +49,7 @@ public class FoundFragment extends Fragment {
         storage = FirebaseStorage.getInstance();
 
         uid = ((Dashboard) getActivity()).getUID();
+        setUser(uid);
 
         your_founds = new ArrayList<>();
         others_founds = new ArrayList<>();
@@ -131,6 +135,8 @@ public class FoundFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if(item.getTitle().equals(getString(R.string.found_new_found))) {
+            Intent newActivity = new Intent(getActivity(), NewFoundObject.class);
+            startActivityForResult(newActivity,RC_NEW_INSERTION);
         }
         else if(item.getTitle().equals(getString(R.string.found_lost_your_list))) {
             insertion_list.setAdapter(your_ca);
@@ -141,5 +147,49 @@ public class FoundFragment extends Fragment {
             others_ca.notifyDataSetChanged();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void setUser(String uid) {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference();
+        ValueEventListener userListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Map<String,Object> data = ((Map<String,Object>) dataSnapshot.getValue());
+                if(data.get(uid) != null) {
+                    String userID = ((Map)data.get(uid)).get("userID").toString();
+                    String displayName = ((Map) data.get(uid)).get("displayName").toString();
+                    String email = ((Map) data.get(uid)).get("email").toString();
+                    int gender = Integer.parseInt(((Map) data.get(uid)).get("gender").toString());
+                    String city = "", birthday = "";
+                    if(((Map) data.get(uid)).get("city") != null)
+                        city = ((Map) data.get(uid)).get("city").toString();
+                    if(((Map) data.get(uid)).get("birthday") != null)
+                        birthday = ((Map) data.get(uid)).get("birthday").toString();
+                    Map<String, PersonalObject> objs;
+                    if( ((Map)data.get(uid)).get("objs") != null)
+                        objs = ((Map<String, PersonalObject>) ((Map)data.get(uid)).get("objs"));
+                    else
+                        objs = new HashMap<>();
+                    user = new User(userID, displayName, email, gender, city, birthday, objs);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        };
+        myRef.child("users").addValueEventListener(userListener);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == RC_NEW_INSERTION) {
+            if(resultCode == Activity.RESULT_OK) {
+
+            }
+        }
     }
 }

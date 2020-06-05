@@ -33,6 +33,7 @@ import com.marco_cavalli.lost_and_found.ui.base.Dashboard;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Map;
 
 public class HomeFragment extends Fragment {
@@ -52,8 +53,8 @@ public class HomeFragment extends Fragment {
         database = FirebaseDatabase.getInstance();
         storage = FirebaseStorage.getInstance();
         View root = inflater.inflate(R.layout.fragment_home, container, false);
-        user = ((Dashboard) getActivity()).getUser();
         uid = ((Dashboard) getActivity()).getUID();
+        getUser();
 
         //ELEMENTS
         list = root.findViewById(R.id.home_objects_list);
@@ -241,5 +242,38 @@ public class HomeFragment extends Fragment {
 
 
         return fileName;
+    }
+
+    private void getUser() {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference();
+        ValueEventListener userListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Map<String,Object> data = ((Map<String,Object>) dataSnapshot.getValue());
+                if(data.get(uid) != null) {
+                    String icon = ((Map) data.get(uid)).get("icon").toString();
+                    String displayName = ((Map) data.get(uid)).get("displayName").toString();
+                    String email = ((Map) data.get(uid)).get("email").toString();
+                    int gender = Integer.parseInt(((Map) data.get(uid)).get("gender").toString());
+                    String city = "", birthday = "";
+                    if (((Map) data.get(uid)).get("city") != null)
+                        city = ((Map) data.get(uid)).get("city").toString();
+                    if (((Map) data.get(uid)).get("birthday") != null)
+                        birthday = ((Map) data.get(uid)).get("birthday").toString();
+                    Map<String, PersonalObject> objs;
+                    if (((Map) data.get(uid)).get("objs") != null)
+                        objs = ((Map<String, PersonalObject>) ((Map) data.get(uid)).get("objs"));
+                    else
+                        objs = new HashMap<>();
+                    user = new User(uid, displayName, email, gender, city, birthday, objs);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        };
+        myRef.child("users").addListenerForSingleValueEvent(userListener);
     }
 }

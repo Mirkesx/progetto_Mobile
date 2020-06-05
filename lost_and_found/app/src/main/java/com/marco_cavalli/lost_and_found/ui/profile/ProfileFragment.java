@@ -152,7 +152,7 @@ public class ProfileFragment extends Fragment {
                 public void onCancelled(DatabaseError databaseError) {
                 }
             };
-            myRef.child("users").addValueEventListener(userListener);
+            myRef.child("users").addListenerForSingleValueEvent(userListener);
     }
 
     private void setValues(User user) {
