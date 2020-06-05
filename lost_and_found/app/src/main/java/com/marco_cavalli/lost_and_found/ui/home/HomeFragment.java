@@ -25,6 +25,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.marco_cavalli.lost_and_found.R;
+import com.marco_cavalli.lost_and_found.custom_adapters.HomeCustomAdapter;
 import com.marco_cavalli.lost_and_found.objects.PersonalObject;
 import com.marco_cavalli.lost_and_found.objects.User;
 import com.marco_cavalli.lost_and_found.ui.base.Dashboard;
@@ -173,7 +174,7 @@ public class HomeFragment extends Fragment {
         d = ""+ Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
         m = ""+Calendar.getInstance().get(Calendar.MONTH);
         y = ""+Calendar.getInstance().get(Calendar.YEAR);
-        h = ""+Calendar.getInstance().get(Calendar.HOUR);
+        h = ""+Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
         min = ""+Calendar.getInstance().get(Calendar.MINUTE);
         s = ""+Calendar.getInstance().get(Calendar.SECOND);
         if(d.length() == 1) {

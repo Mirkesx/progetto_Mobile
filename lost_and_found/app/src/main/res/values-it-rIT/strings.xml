@@ -51,4 +51,13 @@
     <string name="gps_no_provider">Nessun Service Provider è disponibile.</string>
     <string name="gps_cant_be_used">Per usare questa funzionalità devi abilitare il GPS!</string>
     <string name="gps_not_available">Il GPS non sembra disponibile al momento. Riprova nuovamente.</string>
+    <string name="camera_no_back_camera">Il dispositivo non ha una telecamera posteriore. Utilizzerò la fotocamera anteriore.</string>
+    <string name="camera_no_camera">Il dispositivo non ha fotocamere.</string>
+    <string name="gallery_error">Qualcosa è andato storto. Riprova per favore.</string>
+    <string name="gallery_no_selection">Non hai scelto un\'immagine</string>
+    <string name="home_update_object">Modifica</string>
+    <string name="home_edit_object">Modifica di un oggetto</string>
+    <string name="title_found">Ritrovati</string>
+    <string name="founds_yours">Lista degli oggetti ritrovati da te</string>
+    <string name="founds_others">Lista degli oggetti ritrovati da altri</string>
 </resources>

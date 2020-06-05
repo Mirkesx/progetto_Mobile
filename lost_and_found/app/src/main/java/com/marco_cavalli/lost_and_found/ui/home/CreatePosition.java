@@ -231,7 +231,7 @@ public class CreatePosition extends AppCompatActivity {
         d = ""+ Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
         m = ""+Calendar.getInstance().get(Calendar.MONTH);
         y = ""+Calendar.getInstance().get(Calendar.YEAR);
-        h = ""+Calendar.getInstance().get(Calendar.HOUR);
+        h = ""+Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
         min = ""+Calendar.getInstance().get(Calendar.MINUTE);
         s = ""+Calendar.getInstance().get(Calendar.SECOND);
         if(d.length() == 1) {
@@ -239,6 +239,15 @@ public class CreatePosition extends AppCompatActivity {
         }
         if(m.length() == 1) {
             m = "0"+m;
+        }
+        if(h.length() == 1) {
+            h = "0"+h;
+        }
+        if(min.length() == 1) {
+            min = "0"+min;
+        }
+        if(s.length() == 1) {
+            s = "0"+s;
         }
         return d+"/"+m+"/"+y+" - "+h+":"+min+":"+s;
     }

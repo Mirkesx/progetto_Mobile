@@ -1,4 +1,4 @@
-package com.marco_cavalli.lost_and_found.ui.home;
+package com.marco_cavalli.lost_and_found.custom_adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;

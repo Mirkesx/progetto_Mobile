@@ -330,7 +330,7 @@ public class ShowObject extends AppCompatActivity {
         d = ""+ Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
         m = ""+Calendar.getInstance().get(Calendar.MONTH);
         y = ""+Calendar.getInstance().get(Calendar.YEAR);
-        h = ""+Calendar.getInstance().get(Calendar.HOUR);
+        h = ""+Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
         min = ""+Calendar.getInstance().get(Calendar.MINUTE);
         s = ""+Calendar.getInstance().get(Calendar.SECOND);
         if(d.length() == 1) {

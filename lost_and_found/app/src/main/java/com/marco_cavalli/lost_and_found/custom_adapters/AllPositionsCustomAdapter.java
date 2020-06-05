@@ -1,4 +1,4 @@
-package com.marco_cavalli.lost_and_found.ui.home;
+package com.marco_cavalli.lost_and_found.custom_adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,13 +13,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.google.firebase.storage.StorageReference;
 import com.marco_cavalli.lost_and_found.R;
 import com.marco_cavalli.lost_and_found.objects.Position;
 
-import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
 
 public class AllPositionsCustomAdapter extends ArrayAdapter {
 
@@ -40,8 +37,8 @@ public class AllPositionsCustomAdapter extends ArrayAdapter {
 
         convertView = inf.inflate(R.layout.positions_custom_list_item, null);
 
-        TextView textDesc = (TextView) convertView.findViewById(R.id.home_position_description);
-        TextView textDate = (TextView) convertView.findViewById(R.id.home_position_date);
+        TextView textDesc = (TextView) convertView.findViewById(R.id.found_lost_user_name);
+        TextView textDate = (TextView) convertView.findViewById(R.id.found_lost_object_name);
         ImageView image = (ImageView) convertView.findViewById(R.id.home_position_map);
 
         textDesc.setText(objects.get(position).getDescription());

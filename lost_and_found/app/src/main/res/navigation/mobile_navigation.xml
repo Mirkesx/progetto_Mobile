@@ -17,10 +17,10 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.marco_cavalli.lost_and_found.ui.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        android:id="@+id/navigation_found"
+        android:name="com.marco_cavalli.lost_and_found.ui.found_objects.FoundFragment"
+        android:label="@string/title_found"
+        tools:layout="@layout/fragment_found" />
 
     <fragment
         android:id="@+id/navigation_profile"

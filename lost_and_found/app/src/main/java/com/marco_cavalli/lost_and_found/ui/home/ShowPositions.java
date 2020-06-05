@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,6 +17,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.marco_cavalli.lost_and_found.R;
+import com.marco_cavalli.lost_and_found.custom_adapters.AllPositionsCustomAdapter;
 import com.marco_cavalli.lost_and_found.objects.Position;
 
 import java.util.ArrayList;

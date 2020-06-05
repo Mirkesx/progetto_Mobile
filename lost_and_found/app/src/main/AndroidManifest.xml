@@ -70,6 +70,7 @@
 
         <activity
             android:theme="@style/AppTheme"
+            android:label="@string/profile_edit"
             android:name="com.marco_cavalli.lost_and_found.ui.profile.ProfileEdit">
         </activity>
 
