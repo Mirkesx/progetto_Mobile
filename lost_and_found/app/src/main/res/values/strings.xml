@@ -76,5 +76,8 @@
     <string name="title_found">Found Objects</string>
     <string name="founds_yours">Your\'s founds list</string>
     <string name="founds_others">Other\'s founds list</string>
-    <string name="found_new_found">Add a new object found</string>
+    <string name="found_new_found">Add a new insertion</string>
+    <string name="found_lost_list_generic">Insertions\' list</string>
+    <string name="found_lost_your_list">Show Your insertions</string>
+    <string name="found_lost_others_list">Show Others\' insertions</string>
 </resources>

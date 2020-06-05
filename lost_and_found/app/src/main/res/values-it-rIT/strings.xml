@@ -60,4 +60,8 @@
     <string name="title_found">Ritrovati</string>
     <string name="founds_yours">Lista degli oggetti ritrovati da te</string>
     <string name="founds_others">Lista degli oggetti ritrovati da altri</string>
+    <string name="found_new_found">Aggiungi un nuovo annuncio</string>
+    <string name="found_lost_list_generic">Lista degli annunci</string>
+    <string name="found_lost_your_list">Mostra i tuoi annunci</string>
+    <string name="found_lost_others_list">Mostra gli annunci di altri</string>
 </resources>

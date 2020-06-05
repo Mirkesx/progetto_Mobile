@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <item  android:id="@+id/found_lost_new_insertion"
+        android:title="@string/found_new_found"/>
+    <item  android:id="@+id/found_lost_your_insertions"
+        android:title="@string/found_lost_your_list"/>
+    <item  android:id="@+id/found_lost_others_insertions"
+        android:title="@string/found_lost_others_list"/>>
+
+</menu>

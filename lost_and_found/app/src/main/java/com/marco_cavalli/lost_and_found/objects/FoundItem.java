@@ -2,12 +2,13 @@ package com.marco_cavalli.lost_and_found.objects;
 
 public class FoundItem {
 
-    String id, user_name, date, icon, object_name, description;
+    String id, user_id, user_name, date, icon, object_name, description;
     Double latitude, longitude;
     Boolean setFound;
 
-    public FoundItem(String id, String user_name, String date, String icon, String object_name, String description, Double latitude, Double longitude) {
+    public FoundItem(String id, String user_id, String user_name, String date, String icon, String object_name, String description, Double latitude, Double longitude) {
         this.id = id;
+        this.user_id = user_id;
         this.user_name = user_name;
         this.date = date;
         this.icon = icon;
@@ -18,7 +19,28 @@ public class FoundItem {
         setFound = false;
     }
 
+    public FoundItem(String id, String user_id, String user_name, String date, String icon, String object_name, String description, Double latitude, Double longitude, Boolean setFound) {
+        this.id = id;
+        this.user_id = user_id;
+        this.user_name = user_name;
+        this.date = date;
+        this.icon = icon;
+        this.object_name = object_name;
+        this.description = description;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.setFound = setFound;
+    }
+
     public FoundItem() {
+    }
+
+    public String getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(String user_id) {
+        this.user_id = user_id;
     }
 
     public String getId() {
