@@ -74,6 +74,12 @@
             android:name="com.marco_cavalli.lost_and_found.ui.profile.ProfileEdit">
         </activity>
 
+        <activity
+            android:theme="@style/AppTheme"
+            android:label="@string/new_insertion"
+            android:name="com.marco_cavalli.lost_and_found.ui.found_objects.NewFoundObject">
+        </activity>
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.example.android.fileprovider"

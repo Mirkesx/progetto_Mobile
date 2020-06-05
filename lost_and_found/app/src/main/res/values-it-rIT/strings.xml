@@ -64,4 +64,5 @@
     <string name="found_lost_list_generic">Lista degli annunci</string>
     <string name="found_lost_your_list">Mostra i tuoi annunci</string>
     <string name="found_lost_others_list">Mostra gli annunci di altri</string>
+    <string name="new_insertion">Nuovo annuncio</string>
 </resources>

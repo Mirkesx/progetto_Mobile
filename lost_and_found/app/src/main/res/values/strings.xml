@@ -80,4 +80,5 @@
     <string name="found_lost_list_generic">Insertions\' list</string>
     <string name="found_lost_your_list">Show Your insertions</string>
     <string name="found_lost_others_list">Show Others\' insertions</string>
+    <string name="new_insertion">New insertion</string>
 </resources>

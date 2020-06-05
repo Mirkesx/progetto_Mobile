@@ -3,6 +3,7 @@ package com.marco_cavalli.lost_and_found.custom_adapters;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,6 +55,18 @@ public class FoundCustomAdapter extends ArrayAdapter {
             setImage(icon, objects.get(position).getIcon());
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+        }
+
+        if(objects.get(position).getSetFound()) {
+            convertView.findViewById(R.id.found_lost_item).setBackgroundColor(context.getColor(R.color.found_item));
+            userName.setTextColor(Color.BLACK);
+            objectName.setTextColor(Color.BLACK);
+            date.setTextColor(Color.BLACK);
+        } else {
+            convertView.findViewById(R.id.found_lost_item).setBackgroundColor(context.getColor(R.color.not_found_item));
+            userName.setTextColor(Color.WHITE);
+            objectName.setTextColor(Color.WHITE);
+            date.setTextColor(Color.WHITE);
         }
 
         return convertView;
