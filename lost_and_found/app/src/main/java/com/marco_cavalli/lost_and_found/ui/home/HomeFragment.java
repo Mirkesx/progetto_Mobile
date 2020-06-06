@@ -173,7 +173,7 @@ public class HomeFragment extends Fragment {
     private String today() {
         String d, m, y, h, min, s;
         d = ""+ Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
-        m = ""+Calendar.getInstance().get(Calendar.MONTH);
+        m = ""+(Calendar.getInstance().get(Calendar.MONTH)+1);
         y = ""+Calendar.getInstance().get(Calendar.YEAR);
         h = ""+Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
         min = ""+Calendar.getInstance().get(Calendar.MINUTE);
@@ -203,7 +203,7 @@ public class HomeFragment extends Fragment {
                             String object_id = ((Map) entry.getValue()).get("object_id").toString();
                             String icon = "";
                             if(((Map) entry.getValue()).get("icon") != null)
-                                icon = ((Map) entry.getValue()).get("object_id").toString();
+                                icon = ((Map) entry.getValue()).get("icon").toString();
                             PersonalObject po = new PersonalObject(icon, name, description, object_id);
                             objects.add(po);
                         }

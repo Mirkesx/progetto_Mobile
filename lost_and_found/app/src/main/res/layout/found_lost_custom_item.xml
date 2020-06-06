@@ -45,10 +45,12 @@
             android:layout_height="wrap_content"
             android:paddingTop="4dp"
             android:textSize="20sp"
+            android:visibility="visible"
             app:layout_constraintBottom_toTopOf="@+id/found_lost_date"
             app:layout_constraintEnd_toStartOf="@+id/found_lost_image"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/found_lost_user_name" />
+            app:layout_constraintTop_toBottomOf="@+id/found_lost_user_name"
+            tools:visibility="visible" />
 
         <ImageView
             android:id="@+id/found_lost_image"

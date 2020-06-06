@@ -17,10 +17,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.marco_cavalli.lost_and_found.R;
+import com.marco_cavalli.lost_and_found.comparators.PositionComparator;
 import com.marco_cavalli.lost_and_found.custom_adapters.AllPositionsCustomAdapter;
 import com.marco_cavalli.lost_and_found.objects.Position;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Map;
 
 public class ShowPositions extends AppCompatActivity {
@@ -111,6 +113,7 @@ public class ShowPositions extends AppCompatActivity {
                         Position pos = new Position(pos_id, date, description, address, latitude, longitude, icon);
                         positions.add(pos);
                     }
+                    Collections.sort(positions, new PositionComparator());
                     allPositionsCustomAdapter.notifyDataSetChanged();
                 }
             }

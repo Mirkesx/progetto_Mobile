@@ -337,7 +337,7 @@ public class ShowObject extends AppCompatActivity {
     private String createPosID() {
         String d, m, y, h, min, s;
         d = ""+ Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
-        m = ""+Calendar.getInstance().get(Calendar.MONTH);
+        m = ""+(Calendar.getInstance().get(Calendar.MONTH)+1);
         y = ""+Calendar.getInstance().get(Calendar.YEAR);
         h = ""+Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
         min = ""+Calendar.getInstance().get(Calendar.MINUTE);
@@ -347,6 +347,15 @@ public class ShowObject extends AppCompatActivity {
         }
         if(m.length() == 1) {
             m = "0"+m;
+        }
+        if(h.length() == 1) {
+            h = "0"+h;
+        }
+        if(min.length() == 1) {
+            min = "0"+min;
+        }
+        if(s.length() == 1) {
+            s = "0"+s;
         }
         return y+m+d+h+min+s;
     }

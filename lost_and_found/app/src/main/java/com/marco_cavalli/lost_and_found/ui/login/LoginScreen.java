@@ -107,18 +107,11 @@ public class LoginScreen extends BaseActivity {
                 Log.w(TAG_FACEBOOK, "Google sign in failed", exception);
             }
         });
+
+        checkAlreadySignedFacebook();
     }
 
-    // [START on_start_check_user]
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        // Check if user is signed in (non-null) and update UI accordingly.
-        checkAlreadySigned();
-    }
-
-    private void checkAlreadySigned() {
+    private void checkAlreadySignedFacebook() {
         //Check Facebook Auth already existing
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
         boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
@@ -128,20 +121,6 @@ public class LoginScreen extends BaseActivity {
             signInMethod = "Facebook";
             loadDashboard();
         }
-
-        //Check Google Auth already existing
-        GoogleSignInAccount lastSignedInAccount= GoogleSignIn.getLastSignedInAccount(this);
-        if(lastSignedInAccount!=null){
-            // user has already logged in, you can check user's email, name etc from lastSignedInAccount
-            Log.d(TAG_GOOGLE, "Got cached sign-in");
-            signInMethod = "Google";
-            loadDashboard();
-        }
-
-        //Check FireBase Auth
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        if(currentUser != null)
-            loadDashboard();
     }
 
     // [START onactivityresult]
@@ -236,7 +215,6 @@ public class LoginScreen extends BaseActivity {
                 Intent intent = new Intent(this, Dashboard.class);
                 intent.putExtra("signInMethod",signInMethod);
                 intent.putExtra("uid",mAuth.getUid());
-                setUserInfo();
 
                 FirebaseDatabase database = FirebaseDatabase.getInstance();
                 DatabaseReference myRef = database.getReference();
@@ -246,6 +224,7 @@ public class LoginScreen extends BaseActivity {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         Map<String,Object> data = ((Map<String,Object>) dataSnapshot.getValue());
                         if(data == null || data.get(mAuth.getUid()) == null) {
+                            setUserInfo();
                             User user = new User(mAuth.getUid(), displayName, email);
 
                             myRef.child("users").child(mAuth.getUid()).setValue(user);

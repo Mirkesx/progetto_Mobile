@@ -84,4 +84,5 @@
     <string name="longitude">Longitude</string>
     <string name="address">Address</string>
     <string name="home_create_position_missing_description">You must set a description!</string>
+    <string name="new_insertion_missing_data">You must set both the name and the description.</string>
 </resources>

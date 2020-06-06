@@ -1,11 +1,13 @@
 package com.marco_cavalli.lost_and_found.objects;
 
 import java.util.Calendar;
+import java.util.Date;
 
 public class Position {
 
     Double latitude, longitude;
     String date, description, pos_id, icon, address;
+    Date timestamp;
 
     public Position() {
     }
@@ -21,19 +23,7 @@ public class Position {
         this.description = description;
         this.address = "";
         this.icon = "";
-    }
-
-    public Position(String pos_id, String date, String description, Double latitude, Double longitude, String icon) {
-        this.pos_id = pos_id;
-        this.latitude = latitude;
-        this.longitude = longitude;
-        if(date != null)
-            this.date = date;
-        else
-            this.date = today();
-        this.description = description;
-        this.address = "";
-        this.icon = icon;
+        this.timestamp = Calendar.getInstance().getTime();
     }
 
     public Position(String pos_id, String date, String description, String address, Double latitude, Double longitude, String icon) {
@@ -47,6 +37,7 @@ public class Position {
         this.description = description;
         this.address = address;
         this.icon = icon;
+        this.timestamp = Calendar.getInstance().getTime();
     }
 
     public String getIcon() {
@@ -109,6 +100,14 @@ public class Position {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public Date getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(Date timestamp) {
+        this.timestamp = timestamp;
     }
 
     private String today() {

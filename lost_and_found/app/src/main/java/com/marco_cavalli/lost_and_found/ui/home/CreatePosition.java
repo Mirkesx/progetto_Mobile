@@ -277,7 +277,7 @@ public class CreatePosition extends AppCompatActivity {
     private String today() {
         String d, m, y, h, min, s;
         d = ""+ Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
-        m = ""+Calendar.getInstance().get(Calendar.MONTH);
+        m = ""+(Calendar.getInstance().get(Calendar.MONTH)+1);
         y = ""+Calendar.getInstance().get(Calendar.YEAR);
         h = ""+Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
         min = ""+Calendar.getInstance().get(Calendar.MINUTE);

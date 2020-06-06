@@ -198,7 +198,6 @@ public class CreateObject extends AppCompatActivity {
 
     private void checkImage() {
         try {
-            ContextWrapper cw = new ContextWrapper(getApplicationContext());
             File f=new File(this.getFilesDir()+"/tmp", "tmp.jpg");
             Bitmap b = BitmapFactory.decodeStream(new FileInputStream(f));
             image.setImageBitmap(b);
