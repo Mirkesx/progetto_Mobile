@@ -1,8 +1,10 @@
 package com.marco_cavalli.lost_and_found.ui.base;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -11,6 +13,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.marco_cavalli.lost_and_found.R;
 import com.marco_cavalli.lost_and_found.objects.PersonalObject;
 import com.marco_cavalli.lost_and_found.objects.User;
+import com.marco_cavalli.lost_and_found.ui.login.LoginScreen;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
@@ -31,9 +34,10 @@ public class Dashboard extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Bundle bundle = getIntent().getExtras();
-        signInMethod = bundle.getString("signInMethod");
-        uid = bundle.getString("uid");
+        checkUserLogged();
+        //Bundle bundle = getIntent().getExtras();
+        //signInMethod = bundle.getString("signInMethod");
+        uid = FirebaseAuth.getInstance().getUid();
         setUser(uid);
         setContentView(R.layout.activity_main);
         BottomNavigationView navView = findViewById(R.id.nav_view);
@@ -45,6 +49,14 @@ public class Dashboard extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
+    }
+
+    private void checkUserLogged() {
+        if(FirebaseAuth.getInstance().getCurrentUser() == null) {
+            Intent intent = new Intent(this, LoginScreen.class);
+            startActivity(intent);
+            finish();
+        }
     }
 
     public String getSignInMethod() {

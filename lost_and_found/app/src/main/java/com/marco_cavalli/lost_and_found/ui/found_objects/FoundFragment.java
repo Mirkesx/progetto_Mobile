@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -160,10 +161,12 @@ public class FoundFragment extends Fragment {
         else if(item.getTitle().equals(getString(R.string.found_lost_your_list))) {
             insertion_list.setAdapter(your_ca);
             your_ca.notifyDataSetChanged();
+            ((TextView)getActivity().findViewById(R.id.found_your_founds)).setText(getString(R.string.found_lost_your_list));
         }
         else if(item.getTitle().equals(getString(R.string.found_lost_others_list))) {
             insertion_list.setAdapter(others_ca);
             others_ca.notifyDataSetChanged();
+            ((TextView)getActivity().findViewById(R.id.found_your_founds)).setText(getString(R.string.found_lost_others_list));
         }
         return super.onOptionsItemSelected(item);
     }

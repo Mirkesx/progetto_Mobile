@@ -108,10 +108,10 @@ public class LoginScreen extends BaseActivity {
             }
         });
 
-        checkAlreadySignedFacebook();
+        checkAlreadySigned();
     }
 
-    private void checkAlreadySignedFacebook() {
+    private void checkAlreadySigned() {
         //Check Facebook Auth already existing
         AccessToken accessToken = AccessToken.getCurrentAccessToken();
         boolean isLoggedIn = accessToken != null && !accessToken.isExpired();
@@ -119,8 +119,26 @@ public class LoginScreen extends BaseActivity {
         if(isLoggedIn) {
             Log.d(TAG_FACEBOOK, "Got cached sign-in");
             signInMethod = "Facebook";
-            loadDashboard();
+            Log.d("INTENT FIREBASE",signInMethod);
+            //loadDashboard();
         }
+
+        //Check Google Auth already existing
+        GoogleSignInAccount lastSignedInAccount= GoogleSignIn.getLastSignedInAccount(this);
+        if(lastSignedInAccount!=null){
+            // user has already logged in, you can check user's email, name etc from lastSignedInAccount
+            Log.d(TAG_GOOGLE, "Got cached sign-in");
+            signInMethod = "Google";
+            Log.d("INTENT FIREBASE",signInMethod);
+            //loadDashboard();
+        }
+
+        //Check FireBase Auth
+        /*FirebaseUser currentUser = mAuth.getCurrentUser();
+        if(currentUser != null) {
+            Log.d("INTENT FIREBASE","Firebase");
+            loadDashboard();
+        }*/
     }
 
     // [START onactivityresult]

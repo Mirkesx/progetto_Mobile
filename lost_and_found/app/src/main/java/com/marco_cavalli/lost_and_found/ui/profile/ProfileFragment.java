@@ -92,16 +92,14 @@ public class ProfileFragment extends Fragment {
             FirebaseAuth.getInstance().signOut();
             Intent intent = new Intent(getActivity(), LoginScreen.class);
             //intent.putExtra();
-            if(signInMethod.equals("Google")) {
-                GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                        .requestIdToken(getString(R.string.default_web_client_id))
-                        .requestEmail()
-                        .build();
-                GoogleSignIn.getClient(getActivity(), gso).signOut();
-            }
-            if(signInMethod.equals("Facebook")) {
-                LoginManager.getInstance().logOut();
-            }
+            GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestIdToken(getString(R.string.default_web_client_id))
+                    .requestEmail()
+                    .build();
+            GoogleSignIn.getClient(getActivity(), gso).signOut();
+
+            LoginManager.getInstance().logOut();
+
             startActivity(intent);
             getActivity().finish();
         });
