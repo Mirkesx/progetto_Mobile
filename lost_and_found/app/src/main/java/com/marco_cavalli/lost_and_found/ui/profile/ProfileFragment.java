@@ -3,24 +3,17 @@ package com.marco_cavalli.lost_and_found.ui.profile;
 import android.app.Activity;
 import android.content.ContextWrapper;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.util.Log;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -92,9 +85,6 @@ public class ProfileFragment extends Fragment {
         edit.setOnClickListener(v -> {
            Intent newActivity = new Intent(getActivity(), ProfileEdit.class);
            newActivity.putExtra("uid",uid);
-            newActivity.putExtra("city",textViewCity.getText());
-            newActivity.putExtra("id_gender",textViewGender.getText());
-            newActivity.putExtra("birthday",textViewBirthday.getText());
             startActivityForResult(newActivity,RC_EDIT_PROFILE);
         });
 
@@ -132,7 +122,7 @@ public class ProfileFragment extends Fragment {
                         String icon = ((Map) data.get(uid)).get("icon").toString();
                         String displayName = ((Map) data.get(uid)).get("displayName").toString();
                         String email = ((Map) data.get(uid)).get("email").toString();
-                        int gender = Integer.parseInt(((Map) data.get(uid)).get("gender").toString());
+                        int id_gender = Integer.parseInt(((Map) data.get(uid)).get("gender").toString());
                         String city = "", birthday = "";
                         if (((Map) data.get(uid)).get("city") != null)
                             city = ((Map) data.get(uid)).get("city").toString();
@@ -143,7 +133,7 @@ public class ProfileFragment extends Fragment {
                             objs = ((Map<String, PersonalObject>) ((Map) data.get(uid)).get("objs"));
                         else
                             objs = new HashMap<>();
-                        user = new User(uid, displayName, email, gender, city, birthday, objs);
+                        user = new User(uid, displayName, email, id_gender, city, birthday, objs);
                         setValues(user);
                     }
                 }
@@ -160,7 +150,7 @@ public class ProfileFragment extends Fragment {
         id_gender = user.getGender();
         textViewName.setText(user.getDisplayName());
         textViewEmail.setText(user.getEmail());
-        textViewGender.setText(getString(id_gender));
+        textViewGender.setText(getIdGender(id_gender));
         textViewCity.setText(user.getCity());
         textViewBirthday.setText(user.getBirthday());
     }
@@ -174,7 +164,7 @@ public class ProfileFragment extends Fragment {
         if(requestCode == RC_EDIT_PROFILE) {
             if(resultCode == Activity.RESULT_OK) {
                 id_gender = Integer.parseInt(data.getStringExtra("id_gender"));
-                textViewGender.setText(getString(id_gender));
+                textViewGender.setText(getIdGender(id_gender));
                 textViewCity.setText(data.getStringExtra("city"));
                 textViewBirthday.setText(data.getStringExtra("birthday"));
 
@@ -197,6 +187,14 @@ public class ProfileFragment extends Fragment {
                 setProfilePic();
             }
         }
+    }
+
+    private int getIdGender(int gender) {
+        if(gender == 1)
+            return R.string.gender_male;
+        if(gender == 2)
+            return R.string.gender_female;
+        return R.string.gender_not_specified;
     }
 
     private void setProfilePic() { //check if the file is cached, then it downloads it if it doesn't

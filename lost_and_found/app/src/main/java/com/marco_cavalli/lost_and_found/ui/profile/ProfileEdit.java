@@ -25,9 +25,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
 import com.codetroopers.betterpickers.calendardatepicker.CalendarDatePickerDialogFragment;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.marco_cavalli.lost_and_found.R;
+import com.marco_cavalli.lost_and_found.objects.PersonalObject;
+import com.marco_cavalli.lost_and_found.objects.User;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -36,6 +43,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ProfileEdit extends AppCompatActivity {
 
@@ -60,9 +69,7 @@ public class ProfileEdit extends AppCompatActivity {
 
 
         uid = data.getString("uid");
-        id_gender =getIdGender(data.getString("id_gender"));
-        city = data.getString("city");
-        birthday = data.getString("birthday");
+        getUser();
 
         //EDIT TEXT
         editViewCity = findViewById(R.id.profile_city_edit);
@@ -81,7 +88,7 @@ public class ProfileEdit extends AppCompatActivity {
         camera = findViewById(R.id.profile_camera);
 
         //SETTING VALUES
-        textViewGender.setText(getString(id_gender));
+        textViewGender.setText(getString(getIdGender(id_gender)));
         editViewCity.setText(""+city);
         textViewBirthday.setText(birthday);
 
@@ -165,15 +172,20 @@ public class ProfileEdit extends AppCompatActivity {
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
         String result = item.getTitle().toString();
+        if(result.equals(getString(R.string.gender_not_specified)))
+            id_gender = 0;
+        else if(result.equals(getString(R.string.gender_male)))
+            id_gender = 1;
+        else if(result.equals(getString(R.string.gender_female)))
+            id_gender = 2;
         textViewGender.setText(result);
-        id_gender = getIdGender(result);
         return true;
     }
 
-    private int getIdGender(String gender) {
-        if(gender.equals(getString(R.string.gender_male)))
+    private int getIdGender(int gender) {
+        if(gender == 1)
             return R.string.gender_male;
-        if(gender.equals(getString(R.string.gender_female)))
+        if(gender == 2)
             return R.string.gender_female;
         return R.string.gender_not_specified;
     }
@@ -333,5 +345,34 @@ public class ProfileEdit extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+    }
+
+    private void getUser() {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference();
+        ValueEventListener userListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Map<String, Object> data = ((Map<String, Object>) dataSnapshot.getValue());
+                if (data.get(uid) != null) {
+                    id_gender = Integer.parseInt(((Map) data.get(uid)).get("gender").toString());
+                    city = "";
+                    birthday = "";
+                    if (((Map) data.get(uid)).get("city") != null)
+                        city = ((Map) data.get(uid)).get("city").toString();
+                    if (((Map) data.get(uid)).get("birthday") != null)
+                        birthday = ((Map) data.get(uid)).get("birthday").toString();
+
+                    textViewGender.setText(getIdGender(id_gender));
+                    editViewCity.setText(city);
+                    textViewBirthday.setText(birthday);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        };
+        myRef.child("users").addListenerForSingleValueEvent(userListener);
     }
 }

@@ -26,7 +26,7 @@ public class User {
         this.userID = userID;
         this.displayName = displayName;
         this.email = email;
-        this.gender = R.string.gender_not_specified;
+        this.gender = 0; //not_specified
         this.city = "";
         this.birthday ="";
         this.objs = new HashMap<>();

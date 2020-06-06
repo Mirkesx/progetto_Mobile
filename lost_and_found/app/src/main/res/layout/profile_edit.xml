@@ -43,6 +43,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
             android:orientation="horizontal"
             android:weightSum="3">
 
@@ -55,7 +56,9 @@
                 android:layout_weight="2"
                 android:text="@string/profile_gender"
                 android:textAlignment="center"
-                android:textSize="20sp" />
+                android:textColor="@color/colorPrimary"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/profile_gender_edit"
@@ -73,6 +76,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
+            android:layout_marginTop="5dp"
             android:orientation="horizontal">
 
             <TextView
@@ -85,7 +89,9 @@
                 android:paddingTop="10sp"
                 android:text="@string/profile_city"
                 android:textAlignment="center"
-                android:textSize="20sp" />
+                android:textColor="@color/colorPrimary"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/profile_city_edit"
@@ -104,6 +110,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
+            android:layout_marginTop="5dp"
             android:orientation="horizontal">
 
             <TextView
@@ -115,7 +122,9 @@
                 android:layout_weight="2"
                 android:text="@string/profile_birthday"
                 android:textAlignment="center"
-                android:textSize="20sp" />
+                android:textColor="@color/colorPrimary"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/profile_birthday_edit"
@@ -133,6 +142,7 @@
             style="?android:attr/buttonBarStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
             android:orientation="horizontal">
 
             <Button

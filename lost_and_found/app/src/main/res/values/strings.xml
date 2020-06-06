@@ -9,6 +9,11 @@
     <string name="Confirm">Confirm</string>
     <string name="Cancel">Cancel</string>
 
+    <!-- Strings for Auth -->
+
+    <string name="facebook_app_id" translatable="false">1481277308721028</string> <string name="fb_login_protocol_scheme" translatable="false">fb1481277308721028</string>
+    <string name="sign_in" translatable="false">Sign in</string>
+
 
     <!-- Strings for profile Fragment -->
 
@@ -26,12 +31,6 @@
     <string name="gender_not_specified">Not specified</string>
     <string name="profile_gender_hint">Click to pick a gender</string>
     <string name="CalendarTag">Birthday Calendar Picker</string>
-
-
-    <!-- Strings for Auth -->
-
-    <string name="facebook_app_id" translatable="false">1481277308721028</string> <string name="fb_login_protocol_scheme" translatable="false">fb1481277308721028</string>
-    <string name="sign_in" translatable="false">Sign in</string>
 
     <string name="pick_gender" >Pick a gender</string>
     <string name="home_new_object">Add an object</string>

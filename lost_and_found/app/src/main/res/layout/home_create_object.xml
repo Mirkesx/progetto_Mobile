@@ -83,13 +83,17 @@
                     android:id="@+id/home_create_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
                     android:text="@string/object_name"
-                    android:textSize="20sp" />
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
 
                 <EditText
                     android:id="@+id/home_create_name_edit"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
                     android:autofillHints=""
                     android:ems="10"
                     android:hint="@string/object_name_hint"
@@ -100,8 +104,11 @@
                     android:id="@+id/home_create_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
                     android:text="@string/object_description"
-                    android:textSize="20sp" />
+                    android:textColor="@color/colorPrimary"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
 
                 <EditText
                     android:id="@+id/home_create_description_edit"
@@ -111,7 +118,8 @@
                     android:ems="10"
                     android:hint="@string/object_description_hint"
                     android:inputType="textPersonName"
-                    android:textSize="20sp" />
+                    android:textSize="20sp"
+                    android:layout_marginTop="5dp" />
 
             </LinearLayout>
 
