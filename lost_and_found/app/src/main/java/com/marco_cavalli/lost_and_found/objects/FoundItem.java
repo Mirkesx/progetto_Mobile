@@ -1,8 +1,5 @@
 package com.marco_cavalli.lost_and_found.objects;
 
-import java.util.Calendar;
-import java.util.Date;
-
 public class FoundItem {
 
     String id, user_id, user_name, date, icon, object_name, description, address, timestamp;

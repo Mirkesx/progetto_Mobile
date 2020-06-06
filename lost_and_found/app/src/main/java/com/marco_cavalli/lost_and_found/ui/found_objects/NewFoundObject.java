@@ -127,7 +127,7 @@ public class NewFoundObject extends AppCompatActivity {
 
             Intent data = new Intent();
             data.putExtra("object_name", textObjectName.getText());
-            data.putExtra("object_desc", textDescription.getText());
+            data.putExtra("description", textDescription.getText());
             data.putExtra("date", textDate.getText());
             data.putExtra("address", textAddress.getText());
             data.putExtra("latitude", textLatitude.getText());

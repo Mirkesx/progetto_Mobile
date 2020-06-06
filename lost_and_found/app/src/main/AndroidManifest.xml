@@ -65,6 +65,12 @@
 
         <activity
             android:theme="@style/AppTheme"
+            android:label="@string/show_insertion"
+            android:name=".ui.found_objects.ShowInsertion">
+        </activity>
+
+        <activity
+            android:theme="@style/AppTheme"
             android:name="com.marco_cavalli.lost_and_found.ui.home.EditObject">
         </activity>
 

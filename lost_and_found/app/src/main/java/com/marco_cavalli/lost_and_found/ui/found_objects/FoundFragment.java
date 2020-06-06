@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -50,6 +51,7 @@ public class FoundFragment extends Fragment {
     private ListView insertion_list;
     private FoundCustomAdapter your_ca, others_ca;
     private final int RC_NEW_INSERTION = 10;
+    private final int RC_SHOW_INSERTION = 11;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_found, container, false);
@@ -73,8 +75,19 @@ public class FoundFragment extends Fragment {
         insertion_list.setAdapter(your_ca);
 
 
+        //Listeners
+        insertion_list.setOnItemClickListener((parent, view, position, id) -> {
+            Intent intent = new Intent(getContext(), ShowInsertion.class);
+            intent.putExtra("uid",uid);
+            intent.putExtra("insertion_id", ((FoundItem)insertion_list.getAdapter().getItem(position)).getId() );
+            startActivityForResult(intent, RC_SHOW_INSERTION);
+        });
+
         return root;
     }
+
+
+    // END ON CREATE
 
     @Override
     public void onStart() {
@@ -213,13 +226,14 @@ public class FoundFragment extends Fragment {
                 String id, date, icon, object_name, description, address, timestamp;
                 Double latitude, longitude;
 
+                Bundle data_bundle = data.getExtras();
                 id = createID()+uid;
-                date = data.getStringExtra("date");
-                object_name = data.getStringExtra("object_name");
-                description = data.getStringExtra("description");
-                address = data.getStringExtra("address");
-                latitude = Double.parseDouble(data.getStringExtra("latitude"));
-                longitude = Double.parseDouble(data.getStringExtra("longitude"));
+                object_name = data_bundle.get("object_name").toString();
+                description = data_bundle.get("description").toString();
+                date = data_bundle.get("date").toString();
+                address = data_bundle.get("address").toString();
+                latitude = Double.parseDouble(data_bundle.get("latitude").toString());
+                longitude = Double.parseDouble(data_bundle.get("longitude").toString());
                 icon = saveImage("found"+id+"_image.jpg");
                 timestamp = createID();
                 FoundItem fi = new FoundItem(id,uid,user.getDisplayName(),date,icon,object_name,description,address,latitude,longitude, timestamp);

@@ -85,4 +85,7 @@
     <string name="address">Address</string>
     <string name="home_create_position_missing_description">You must set a description!</string>
     <string name="new_insertion_missing_data">You must set both the name and the description.</string>
+    <string name="user_profile">User profile</string>
+    <string name="found_set_boolean">Set it as \"found\"</string>
+    <string name="show_insertion">Showing insertion</string>
 </resources>
