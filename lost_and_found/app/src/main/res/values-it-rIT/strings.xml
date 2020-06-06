@@ -65,4 +65,14 @@
     <string name="found_lost_your_list">Mostra i tuoi annunci</string>
     <string name="found_lost_others_list">Mostra gli annunci di altri</string>
     <string name="new_insertion">Nuovo annuncio</string>
+    <string name="latitude">Latitudine</string>
+    <string name="longitude">Longitudine</string>
+    <string name="leku_title_activity_location_picker">Rilevatore di posizione</string>
+    <string name="leku_load_location_error">Qualcosa è andato storto. Riprova per favore.</string>
+    <string name="leku_no_search_results">La ricerca non ha dato risultati.</string>
+    <string name="leku_unknown_location">Posizione sconosciuta</string>
+    <string name="leku_voice_search_promp">Ricerca via voce...</string>
+    <string name="leku_voice_search_extra_language">it-IT</string>
+    <string name="leku_toolbar_action_voice_title">Voce</string>
+    <string name="leku_search_hint">Ricerca</string>
 </resources>
