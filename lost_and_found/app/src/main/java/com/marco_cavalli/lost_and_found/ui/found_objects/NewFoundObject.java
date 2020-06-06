@@ -195,25 +195,28 @@ public class NewFoundObject extends AppCompatActivity {
     private String getAddress(Address locality) {
         String full_address = "";
 
-        String address = locality.getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
         String city =  locality.getLocality();
+        String subLocality = locality.getSubLocality();
+        String throughfare = locality.getThoroughfare();
+        String subThroughfare = locality.getSubThoroughfare();
         String state =  locality.getAdminArea();
         String country =  locality.getCountryName();
         String postalCode =  locality.getPostalCode();
-        String knownName =  locality.getFeatureName();
 
-        if(address != null)
-            full_address += address +", ";
+        if(throughfare != null)
+            full_address += throughfare +", ";
+        if(subThroughfare != null)
+            full_address += subThroughfare +", ";
+        if(postalCode != null)
+            full_address += postalCode +", ";
         if(city != null)
             full_address += city +", ";
+        if(subLocality != null)
+            full_address += subLocality +", ";
         if(state != null)
             full_address += state +", ";
         if(country != null)
             full_address += country +", ";
-        if(postalCode != null)
-            full_address += postalCode +", ";
-        if(knownName != null)
-            full_address += knownName +", ";
 
         full_address = full_address.substring(0,full_address.length()-2);
 

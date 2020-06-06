@@ -84,6 +84,7 @@ public class ShowPositions extends AppCompatActivity {
                     for(Map.Entry<String, ?> entry : ((Map<String, ?>) data.get("positions")).entrySet()) {
                         Double latitude = null, longitude = null;
                         String date = null;
+                        String address = "";
                         String description = null;
                         String pos_id, icon = "";
 
@@ -95,6 +96,9 @@ public class ShowPositions extends AppCompatActivity {
                         if(((Map) entry.getValue()).get("date") != null)
                             date = ((Map) entry.getValue()).get("date").toString();
 
+                        if(((Map) entry.getValue()).get("address") != null)
+                            address = ((Map) entry.getValue()).get("address").toString();
+
                         if(((Map) entry.getValue()).get("latitude") != null)
                             latitude = Double.parseDouble(((Map) entry.getValue()).get("latitude").toString());
 
@@ -104,7 +108,7 @@ public class ShowPositions extends AppCompatActivity {
                         if(((Map) entry.getValue()).get("icon") != null)
                             icon = ((Map) entry.getValue()).get("icon").toString();
 
-                        Position pos = new Position(pos_id, date, description, latitude, longitude, icon);
+                        Position pos = new Position(pos_id, date, description, address, latitude, longitude, icon);
                         positions.add(pos);
                     }
                     allPositionsCustomAdapter.notifyDataSetChanged();

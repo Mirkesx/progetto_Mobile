@@ -84,4 +84,5 @@
     <string name="latitude">Latitude</string>
     <string name="longitude">Longitude</string>
     <string name="address">Address</string>
+    <string name="home_create_position_missing_description">You must set a description!</string>
 </resources>

@@ -9,7 +9,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="150dp"
         android:padding="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -17,33 +17,46 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/found_lost_object_name"
+            android:id="@+id/home_show_all_position_date"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:textSize="18sp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/home_position_map"
+            app:layout_constraintEnd_toStartOf="@+id/home_show_all_position_map"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/found_lost_user_name" />
+            app:layout_constraintTop_toBottomOf="@+id/homw_show_all_position_address" />
 
         <ImageButton
-            android:id="@+id/home_position_map"
+            android:id="@+id/home_show_all_position_map"
             android:layout_width="90dp"
             android:layout_height="90dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/found_lost_user_name"
+            app:layout_constraintStart_toEndOf="@+id/home_show_all_position_description"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_baseline_map_48" />
 
         <TextView
-            android:id="@+id/found_lost_user_name"
+            android:id="@+id/home_show_all_position_description"
             android:layout_width="0dp"
-            android:layout_height="60dp"
+            android:layout_height="55dp"
+            android:layout_marginBottom="5dp"
             android:textSize="17sp"
-            app:layout_constraintBottom_toTopOf="@+id/found_lost_object_name"
-            app:layout_constraintEnd_toStartOf="@+id/home_position_map"
+            app:layout_constraintBottom_toTopOf="@+id/homw_show_all_position_address"
+            app:layout_constraintEnd_toStartOf="@+id/home_show_all_position_map"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/homw_show_all_position_address"
+            android:layout_width="0dp"
+            android:layout_height="55dp"
+            android:layout_marginBottom="5dp"
+            app:layout_constraintBottom_toTopOf="@+id/home_show_all_position_date"
+            app:layout_constraintEnd_toStartOf="@+id/home_show_all_position_map"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/home_show_all_position_description" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

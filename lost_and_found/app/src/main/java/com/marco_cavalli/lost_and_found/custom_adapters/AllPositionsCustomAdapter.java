@@ -37,11 +37,13 @@ public class AllPositionsCustomAdapter extends ArrayAdapter {
 
         convertView = inf.inflate(R.layout.positions_custom_list_item, null);
 
-        TextView textDesc = (TextView) convertView.findViewById(R.id.found_lost_user_name);
-        TextView textDate = (TextView) convertView.findViewById(R.id.found_lost_object_name);
-        ImageView image = (ImageView) convertView.findViewById(R.id.home_position_map);
+        TextView textDesc = (TextView) convertView.findViewById(R.id.home_show_all_position_description);
+        TextView textAddress = (TextView) convertView.findViewById(R.id.homw_show_all_position_address);
+        TextView textDate = (TextView) convertView.findViewById(R.id.home_show_all_position_date);
+        ImageView image = (ImageView) convertView.findViewById(R.id.home_show_all_position_map);
 
         textDesc.setText(objects.get(position).getDescription());
+        textAddress.setText(objects.get(position).getAddress());
         if(objects.get(position).getDate() != null) {
             textDate.setText(objects.get(position).getDate());
         } else {

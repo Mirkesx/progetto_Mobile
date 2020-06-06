@@ -5,20 +5,7 @@ import java.util.Calendar;
 public class Position {
 
     Double latitude, longitude;
-    String date;
-    String description;
-    String pos_id;
-    String icon;
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    String address;
+    String date, description, pos_id, icon, address;
 
     public Position() {
     }
@@ -32,6 +19,7 @@ public class Position {
         else
             this.date = today();
         this.description = description;
+        this.address = "";
         this.icon = "";
     }
 
@@ -44,6 +32,20 @@ public class Position {
         else
             this.date = today();
         this.description = description;
+        this.address = "";
+        this.icon = icon;
+    }
+
+    public Position(String pos_id, String date, String description, String address, Double latitude, Double longitude, String icon) {
+        this.pos_id = pos_id;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        if(date != null)
+            this.date = date;
+        else
+            this.date = today();
+        this.description = description;
+        this.address = address;
         this.icon = icon;
     }
 
@@ -99,6 +101,14 @@ public class Position {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     private String today() {

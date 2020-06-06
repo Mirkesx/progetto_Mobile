@@ -7,10 +7,13 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -25,6 +28,8 @@ import androidx.core.content.FileProvider;
 
 import com.marco_cavalli.lost_and_found.R;
 import com.marco_cavalli.lost_and_found.services.LocationTrack;
+import com.shivtechs.maplocationpicker.LocationPickerActivity;
+import com.shivtechs.maplocationpicker.MapUtility;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -34,13 +39,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 public class CreatePosition extends AppCompatActivity {
 
     private String object_id;
     private String uid;
     private EditText editDesc;
-    private TextView textLat, textLon, updateButton;
+    private TextView textAddress, textLat, textLon, updateButton;
     private ImageView getGPS;
 
     private ArrayList permissionsToRequest;
@@ -53,6 +59,7 @@ public class CreatePosition extends AppCompatActivity {
     private String currentPhotoPath;
     private final int REQUEST_LOAD_IMG = 1;
     private final int REQUEST_TAKE_PHOTO = 2;
+    private final int RC_MAP_BUTTON = 3;
     private ImageView image, gallery, camera;
 
     @Override
@@ -81,6 +88,7 @@ public class CreatePosition extends AppCompatActivity {
 
         //Initialize elements
         editDesc = findViewById(R.id.new_position_description);
+        textAddress = findViewById(R.id.new_position_address);
         textLat = findViewById(R.id.new_poition_lat);
         textLon = findViewById(R.id.new_position_lon);
         getGPS = findViewById(R.id.new_position_latlon_button);
@@ -90,11 +98,14 @@ public class CreatePosition extends AppCompatActivity {
         gallery = findViewById(R.id.new_position_gallery);
 
         updateButton.setOnClickListener(v -> {
+            if (editDesc.getText().toString().length() == 0) {
+                Toast.makeText(this, getString(R.string.home_create_position_missing_description), Toast.LENGTH_LONG).show();
+                return;
+            }
+
             Intent data_intent = new Intent();
-            if (editDesc.getText().toString().length() > 0)
-                data_intent.putExtra("description", editDesc.getText().toString());
-            else
-                data_intent.putExtra("description", "");
+            data_intent.putExtra("description", editDesc.getText().toString());
+
             data_intent.putExtra("date", today());
             if (textLat.getText().toString().length() > 0)
                 data_intent.putExtra("latitude", textLat.getText().toString());
@@ -104,21 +115,20 @@ public class CreatePosition extends AppCompatActivity {
                 data_intent.putExtra("longitude", textLon.getText().toString());
             else
                 data_intent.putExtra("longitude", "0");
+            if (textAddress.getText().toString().length() > 0)
+                data_intent.putExtra("address", textAddress.getText().toString());
+            else
+                data_intent.putExtra("address", "");
             setResult(Activity.RESULT_OK, data_intent);
             finish();
         });
 
 
         getGPS.setOnClickListener(view -> {
-            getCoordinates();
-            Uri gmmIntentUri;
-            gmmIntentUri = Uri.parse("geo:0,0?q="+textLat.getText()+","+textLon.getText()+"()");
-            // Create an Intent from gmmIntentUri. Set the action to ACTION_VIEW
-            Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-            // Make the Intent explicit by setting the Google Maps package
-            mapIntent.setPackage("com.google.android.apps.maps");
-            // Attempt to start an activity that can handle the Intent
-            this.startActivity(mapIntent);
+            Intent i = new Intent(this, LocationPickerActivity.class);
+            i.putExtra(MapUtility.LATITUDE, textLat.getText());
+            i.putExtra(MapUtility.LONGITUDE, textLon.getText());
+            startActivityForResult(i, RC_MAP_BUTTON);
         });
 
         if ( getApplicationContext().checkSelfPermission(android.Manifest.permission.ACCESS_COARSE_LOCATION ) == PackageManager.PERMISSION_GRANTED  || getApplicationContext().checkSelfPermission(ACCESS_FINE_LOCATION ) == PackageManager.PERMISSION_GRANTED) {
@@ -155,10 +165,50 @@ public class CreatePosition extends AppCompatActivity {
             }
 
             textLat.setText(""+ latitude);
-            textLon.setText(""+longitude);
+            textLon.setText(""+ longitude);
+
+            try {
+                Geocoder geocoder;
+                geocoder = new Geocoder(this);
+                List<Address> location = geocoder.getFromLocation(latitude, longitude, 1);
+                textAddress.setText(getAddress(location.get(0)));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         } else {
             locationTrack.showSettingsAlert();
         }
+    }
+
+    private String getAddress(Address locality) {
+        String full_address = "";
+
+        String city =  locality.getLocality();
+        String subLocality = locality.getSubLocality();
+        String throughfare = locality.getThoroughfare();
+        String subThroughfare = locality.getSubThoroughfare();
+        String state =  locality.getAdminArea();
+        String country =  locality.getCountryName();
+        String postalCode =  locality.getPostalCode();
+
+        if(throughfare != null)
+            full_address += throughfare +", ";
+        if(subThroughfare != null)
+            full_address += subThroughfare +", ";
+        if(postalCode != null)
+            full_address += postalCode +", ";
+        if(city != null)
+            full_address += city +", ";
+        if(subLocality != null)
+            full_address += subLocality +", ";
+        if(state != null)
+            full_address += state +", ";
+        if(country != null)
+            full_address += country +", ";
+
+        full_address = full_address.substring(0,full_address.length()-2);
+
+        return full_address;
     }
 
     @Override
@@ -330,6 +380,25 @@ public class CreatePosition extends AppCompatActivity {
                 }
             } else {
                 Toast.makeText(this, getString(R.string.gallery_no_selection),Toast.LENGTH_LONG).show();
+            }
+        }
+        if (requestCode == RC_MAP_BUTTON) {
+            Log.d("GOOGLE_ADDRESS", data.getStringExtra("address"));
+            try {
+                if (data != null && data.getStringExtra("address") != null) {
+
+                    Geocoder geocoder;
+                    geocoder = new Geocoder(this);
+                    List<Address> location = geocoder.getFromLocationName(data.getStringExtra("address"),1);
+
+
+                    String address = getAddress(location.get(0));
+                    textLat.setText(""+location.get(0).getLatitude());
+                    textLon.setText(""+location.get(0).getLongitude());
+                    textAddress.setText(address);
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
             }
         }
     }

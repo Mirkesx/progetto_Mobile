@@ -28,7 +28,6 @@ import com.google.firebase.storage.UploadTask;
 import com.marco_cavalli.lost_and_found.R;
 import com.marco_cavalli.lost_and_found.objects.PersonalObject;
 import com.marco_cavalli.lost_and_found.objects.Position;
-import com.marco_cavalli.lost_and_found.ui.base.Dashboard;
 
 import java.io.File;
 import java.util.Calendar;
@@ -43,7 +42,7 @@ public class ShowObject extends AppCompatActivity {
     private String object_id;
     private String uid;
     private String name;
-    private TextView nameView, descriptionView, lastpositionView;
+    private TextView nameView, descriptionView, lastpositionView, addressView;
     private ImageView imageView;
     private PersonalObject obj;
     private FirebaseDatabase database;
@@ -70,6 +69,7 @@ public class ShowObject extends AppCompatActivity {
         nameView = findViewById(R.id.home_show_name_value);
         descriptionView = findViewById(R.id.home_show_description_value);
         lastpositionView = findViewById(R.id.home_show_last_position_description);
+        addressView = findViewById(R.id.home_show_address);
         imageView = findViewById(R.id.home_show_image);
         mapView = findViewById(R.id.home_show_last_position_map);
         updatePosition = findViewById(R.id.home_show_object_add);
@@ -148,6 +148,7 @@ public class ShowObject extends AppCompatActivity {
                                 for(Map.Entry<String, ?> entry : ((Map<String, ?>) data.get("positions")).entrySet()) {
                                     String pos_id = ((Map) entry.getValue()).get("pos_id").toString();
                                     String descr = ((Map) entry.getValue()).get("description").toString();
+                                    String address = ((Map) entry.getValue()).get("address").toString();
                                     String date = null;
                                     if(((Map) entry.getValue()).get("date") != null) {
                                         date = ((Map) entry.getValue()).get("date").toString();
@@ -160,7 +161,7 @@ public class ShowObject extends AppCompatActivity {
                                     if(((Map) entry.getValue()).get("longitude") != null) {
                                         longitude = Double.parseDouble(((Map) entry.getValue()).get("longitude").toString());
                                     }
-                                    Position pos = new Position(pos_id, date, descr, latitude, longitude);
+                                    Position pos = new Position(pos_id, date, descr, address, latitude, longitude, "");
                                     positions.put(pos_id,pos);
                                 }
                             }
@@ -194,7 +195,14 @@ public class ShowObject extends AppCompatActivity {
                     String pos_id = data.get("lastPosition").toString();
                     lastPosition = obj.getPositions().get(pos_id);
                     findViewById(R.id.home_show_last_position_container).setVisibility(View.VISIBLE);
-                    lastpositionView.setText(lastPosition.getDescription());
+                    if(lastPosition.getDescription().length() > 0)
+                        lastpositionView.setText(lastPosition.getDescription());
+                    else
+                        lastpositionView.setVisibility(View.GONE);
+                    if(lastPosition.getAddress().length() > 0)
+                        addressView.setText(lastPosition.getAddress());
+                    else
+                        addressView.setVisibility(View.GONE);
                 }
                 else {
                     lastPosition = null;
@@ -229,11 +237,12 @@ public class ShowObject extends AppCompatActivity {
             if(resultCode == Activity.RESULT_OK) {
                 String description = data.getStringExtra("description");
                 String date = data.getStringExtra("date");
+                String address = data.getStringExtra("address");
                 String pos_id = createPosID();
                 Double latitude = Double.parseDouble(data.getStringExtra("latitude"));
                 Double longitude = Double.parseDouble(data.getStringExtra("longitude"));
                 String icon = saveImage("position"+pos_id+"_image.jpg");
-                Position pos = new Position(pos_id,date,description,latitude,longitude, icon);
+                Position pos = new Position(pos_id,date,description,address,latitude,longitude, icon);
 
                 obj.getPositions().put(pos_id,pos);
 
