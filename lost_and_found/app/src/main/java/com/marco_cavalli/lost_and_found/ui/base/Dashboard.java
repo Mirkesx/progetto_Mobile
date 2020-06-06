@@ -21,6 +21,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,6 +36,7 @@ public class Dashboard extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         checkUserLogged();
+        checkFolders();
         //Bundle bundle = getIntent().getExtras();
         //signInMethod = bundle.getString("signInMethod");
         uid = FirebaseAuth.getInstance().getUid();
@@ -49,6 +51,25 @@ public class Dashboard extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
+    }
+
+    private void checkFolders() {
+        File founds = new File(getFilesDir(),"founds_images");
+        if(!founds.exists()){
+            founds.mkdir();
+        }
+        File tmp = new File(getFilesDir(),"tmp");
+        if(!tmp.exists()){
+            tmp.mkdir();
+        }
+        File objects = new File(getFilesDir(),"objects_images");
+        if(!objects.exists()){
+            objects.mkdir();
+        }
+        File losts = new File(getFilesDir(),"losts_images");
+        if(!losts.exists()){
+            losts.mkdir();
+        }
     }
 
     private void checkUserLogged() {

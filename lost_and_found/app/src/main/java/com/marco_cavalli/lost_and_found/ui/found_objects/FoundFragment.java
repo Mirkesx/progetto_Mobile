@@ -240,10 +240,6 @@ public class FoundFragment extends Fragment {
 
                 DatabaseReference myRef = database.getReference();
                 myRef.child("founds").child(id).setValue(fi);
-
-                if(icon.length() > 0) {
-                    uploadFile(icon);
-                }
             }
         }
     }
@@ -292,19 +288,19 @@ public class FoundFragment extends Fragment {
                 finalFile.delete();
             }
 
-            boolean success = tmpFile.renameTo(finalFile);
+            tmpFile.renameTo(finalFile);
             Log.d("Image_management","Moved "+tmpFile.toString());
         } catch (Exception e) {
             e.printStackTrace();
         }
-
+        uploadFile(fileName);
 
         return fileName;
     }
 
     private void uploadFile(String path){
         if(!path.equals("")) {
-            Uri file = Uri.fromFile(new File(getActivity().getFilesDir()+"/founds",path));
+            Uri file = Uri.fromFile(new File(getActivity().getFilesDir()+"/founds_images",path));
             StorageReference storageRef = storage.getReference();
             StorageReference riversRef = storageRef.child("founds/"+path);
             UploadTask uploadTask = riversRef.putFile(file);

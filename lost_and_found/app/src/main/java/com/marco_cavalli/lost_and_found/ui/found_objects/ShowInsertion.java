@@ -1,8 +1,11 @@
 package com.marco_cavalli.lost_and_found.ui.found_objects;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -25,6 +28,8 @@ import com.marco_cavalli.lost_and_found.R;
 import com.marco_cavalli.lost_and_found.objects.FoundItem;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.Map;
 
 public class ShowInsertion extends AppCompatActivity {
@@ -102,7 +107,7 @@ public class ShowInsertion extends AppCompatActivity {
                     if(data.get("date") != null)
                         date = data.get("date").toString();
 
-                    if(data.get("icon =") != null)
+                    if(data.get("icon") != null)
                         icon = data.get("icon").toString();
 
                     if(data.get("object_name") != null)
@@ -138,8 +143,7 @@ public class ShowInsertion extends AppCompatActivity {
 
                     setValues();
 
-                    if(icon.length() > 0)
-                        setImageView(icon);
+                    setImageView(icon);
                 }
             }
 
@@ -159,21 +163,13 @@ public class ShowInsertion extends AppCompatActivity {
         textLongitude.setText(""+insertion.getLongitude());
     }
 
-    private void setImageView(String path) {
+    private void setImageView(String path)  {
         File file = new File(getFilesDir()+"/founds_images",path);
-        if(file.exists()) {
-            imageView.setImageURI(Uri.fromFile(file));
-        }
-        else {
-            StorageReference storageRef = storage.getReference();
-            StorageReference islandRef = storageRef.child("founds/"+path);
-            File newFile = new File(getFilesDir()+"/founds_images",path);
-
-            islandRef.getFile(newFile).addOnSuccessListener(taskSnapshot -> {
-                imageView.setImageURI(Uri.fromFile(newFile));
-            }).addOnFailureListener(exception -> {
-                exception.printStackTrace();
-            });
+        try {
+            Bitmap b = BitmapFactory.decodeStream(new FileInputStream(file));
+            imageView.setImageBitmap(b);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

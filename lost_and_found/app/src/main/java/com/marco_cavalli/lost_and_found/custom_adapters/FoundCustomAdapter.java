@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,8 +15,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.marco_cavalli.lost_and_found.R;
 import com.marco_cavalli.lost_and_found.objects.FoundItem;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -49,12 +53,8 @@ public class FoundCustomAdapter extends ArrayAdapter {
         userName.setText(objects.get(position).getUser_name());
         objectName.setText(objects.get(position).getObject_name());
         date.setText(objects.get(position).getDate());
-
-        try {
+        if(objects.get(position).getIcon().length() > 0)
             setImage(icon, objects.get(position).getIcon());
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
 
         if(objects.get(position).getSetFound()) {
             convertView.findViewById(R.id.found_lost_item).setBackgroundColor(context.getColor(R.color.found_item));
@@ -71,11 +71,26 @@ public class FoundCustomAdapter extends ArrayAdapter {
         return convertView;
     }
 
-    private void setImage(ImageView icon, String path) throws FileNotFoundException {
-        File iconFile = new File(context.getFilesDir()+"/founds_images",path);
-        if(iconFile.exists()) {
-            Bitmap b = BitmapFactory.decodeStream(new FileInputStream(iconFile));
-            icon.setImageBitmap(b);
+    private void setImage(ImageView icon, String path) {
+        try{
+            File iconFile = new File(context.getFilesDir()+"/founds_images",path);
+            if(path.length() > 0 && iconFile.exists()) {
+                Bitmap b = BitmapFactory.decodeStream(new FileInputStream(iconFile));
+                icon.setImageBitmap(b);
+            } else {
+                StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+                StorageReference islandRef = storageRef.child("founds/"+path);
+                File newFile = new File(context.getFilesDir()+"/founds_images",path);
+
+                islandRef.getFile(newFile).addOnSuccessListener(taskSnapshot -> {
+                    icon.setImageURI(Uri.fromFile(newFile));
+                }).addOnFailureListener(exception -> {
+                    exception.printStackTrace();
+                });
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }
