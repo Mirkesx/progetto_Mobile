@@ -10,6 +10,16 @@ public class Position {
     String pos_id;
     String icon;
 
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    String address;
+
     public Position() {
     }
 

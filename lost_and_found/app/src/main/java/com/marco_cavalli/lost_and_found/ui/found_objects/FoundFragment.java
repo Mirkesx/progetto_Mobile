@@ -84,8 +84,8 @@ public class FoundFragment extends Fragment {
                     others_founds.clear();
                     for(Map.Entry<String, ?> entry : data.entrySet()) {
                         Map<String, ?> foundData = ((Map<String,Object>) entry.getValue());
-                        String id, user_id, user_name, date, icon, object_name, description;
-                        id = user_id = user_name = date = icon = object_name = description = "";
+                        String id, user_id, user_name, date, icon, object_name, description, address;
+                        id = user_id = user_name = date = icon = object_name = description = address = "";
                         Double latitude, longitude;
                         latitude = longitude = 0.0;
                         Boolean setFound = false;
@@ -104,10 +104,16 @@ public class FoundFragment extends Fragment {
                             object_name = foundData.get("object_name").toString();
                         if(foundData.get("description") != null)
                             description = foundData.get("description").toString();
+                        if(foundData.get("address") != null)
+                            description = foundData.get("address").toString();
+                        if(foundData.get("latitude") != null)
+                            longitude = Double.parseDouble(foundData.get("latitude").toString());
+                        if(foundData.get("longitude") != null)
+                            longitude = Double.parseDouble(foundData.get("longitude").toString());
                         if(foundData.get("setFound") != null)
                             setFound = Boolean.parseBoolean(foundData.get("setFound").toString());
 
-                        FoundItem fi = new FoundItem(id,user_id,user_name,date,icon,object_name,description,latitude,longitude,setFound);
+                        FoundItem fi = new FoundItem(id,user_id,user_name,date,icon,object_name,description,address,latitude,longitude,setFound);
 
                         if(uid.equals(user_id))
                             your_founds.add(fi);

@@ -119,7 +119,7 @@ public class NewFoundObject extends AppCompatActivity {
                 Geocoder geocoder;
                 geocoder = new Geocoder(this);
                 List<Address> location = geocoder.getFromLocation(latitude, longitude, 1);
-                textAddress.setText(location.get(0).getLocality());
+                textAddress.setText(getAddress(location.get(0)));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -192,6 +192,34 @@ public class NewFoundObject extends AppCompatActivity {
             locationTrack.stopListener();
     }
 
+    private String getAddress(Address locality) {
+        String full_address = "";
+
+        String address = locality.getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+        String city =  locality.getLocality();
+        String state =  locality.getAdminArea();
+        String country =  locality.getCountryName();
+        String postalCode =  locality.getPostalCode();
+        String knownName =  locality.getFeatureName();
+
+        if(address != null)
+            full_address += address +", ";
+        if(city != null)
+            full_address += city +", ";
+        if(state != null)
+            full_address += state +", ";
+        if(country != null)
+            full_address += country +", ";
+        if(postalCode != null)
+            full_address += postalCode +", ";
+        if(knownName != null)
+            full_address += knownName +", ";
+
+        full_address = full_address.substring(0,full_address.length()-2);
+
+        return full_address;
+    }
+
     //METHODS FOR PHOTO PICKING
 
     //METHODS FOR DATA
@@ -234,15 +262,16 @@ public class NewFoundObject extends AppCompatActivity {
             Log.d("GOOGLE_ADDRESS", data.getStringExtra("address"));
             try {
                 if (data != null && data.getStringExtra("address") != null) {
-                    String address = data.getStringExtra("address");
 
                     Geocoder geocoder;
                     geocoder = new Geocoder(this);
-                    List<Address> location = geocoder.getFromLocationName(address,1);
+                    List<Address> location = geocoder.getFromLocationName(data.getStringExtra("address"),1);
 
+
+                    String address = getAddress(location.get(0));
                     textLatitude.setText(""+location.get(0).getLatitude());
                     textLongitude.setText(""+location.get(0).getLongitude());
-                    textAddress.setText(location.get(0).getLocality());
+                    textAddress.setText(address);
                 }
             } catch (Exception ex) {
                 ex.printStackTrace();
