@@ -33,8 +33,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.marco_cavalli.lost_and_found.R;
-import com.marco_cavalli.lost_and_found.objects.PersonalObject;
-import com.marco_cavalli.lost_and_found.objects.User;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -43,7 +41,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.Map;
 
 public class ProfileEdit extends AppCompatActivity {
@@ -52,7 +49,7 @@ public class ProfileEdit extends AppCompatActivity {
     static final int REQUEST_LOAD_IMG = 2;
     private String currentPhotoPath;
     private Uri photoURI;
-    private EditText editViewCity;
+    private EditText editViewPhone, editViewCity;
     private TextView textViewGender, textViewBirthday;
     private Button update;
     private ImageView profile_edit, gallery, camera;
@@ -72,6 +69,7 @@ public class ProfileEdit extends AppCompatActivity {
         getUser();
 
         //EDIT TEXT
+        editViewPhone = findViewById(R.id.profile_phone_edit);
         editViewCity = findViewById(R.id.profile_city_edit);
 
         //TEXT VIEW
@@ -138,6 +136,7 @@ public class ProfileEdit extends AppCompatActivity {
         update.setOnClickListener(v -> {
             Intent intent = new Intent();
             intent.putExtra("id_gender",""+id_gender);
+            intent.putExtra("phone", ""+editViewPhone.getText());
             intent.putExtra("city", ""+editViewCity.getText());
             intent.putExtra("birthday", textViewBirthday.getText());
             File f = new File(getFilesDir()+"/tmp","tmp.jpg");

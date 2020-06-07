@@ -93,4 +93,10 @@
     <string name="insertion_status">Status</string>
     <string name="insertion_found">Found</string>
     <string name="insertion_not_found">Not found</string>
+    <string name="choose_email_client">Choose an email client</string>
+    <string name="email_found_subject">Claiming found object</string>
+    <string name="email_found_message">Hi! I think this is the item i lost. Can we meet it?</string>
+    <string name="profile_telephone_hint">Your telephone number</string>
+    <string name="profile_city_hint">Your city</string>
+    <string name="mailer_not_found">It seems you don\'t have any app to view emails.</string>
 </resources>

@@ -70,6 +70,14 @@ public class Dashboard extends AppCompatActivity {
         if(!losts.exists()){
             losts.mkdir();
         }
+        File profile_images = new File(getFilesDir(),"profile_images");
+        if(!profile_images.exists()){
+            profile_images.mkdir();
+        }
+        File profile = new File(getFilesDir(),"profile");
+        if(!profile.exists()){
+            profile.mkdir();
+        }
     }
 
     private void checkUserLogged() {

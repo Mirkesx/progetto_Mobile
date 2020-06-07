@@ -46,6 +46,18 @@ public class User {
         this.icon = "";
     }
 
+    public User(String userID, String displayName, String email, String phone, int gender, String city, String birthday, Map<String,PersonalObject> objs) {
+        this.userID = userID;
+        this.displayName = displayName;
+        this.email = email;
+        this.phone = phone;
+        this.gender = gender;
+        this.city = city;
+        this.birthday = birthday;
+        this.objs = objs;
+        this.icon = "";
+    }
+
 
     public User(String userID, String displayName, String email, String phone, int gender, String city, String birthday, Map<String,PersonalObject> objs, String icon) {
         this.userID = userID;
@@ -129,5 +141,20 @@ public class User {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "icon='" + icon + '\'' +
+                ", userID='" + userID + '\'' +
+                ", displayName='" + displayName + '\'' +
+                ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
+                ", gender=" + gender +
+                ", city='" + city + '\'' +
+                ", birthday='" + birthday + '\'' +
+                //", objs=" + objs +
+                '}';
     }
 }

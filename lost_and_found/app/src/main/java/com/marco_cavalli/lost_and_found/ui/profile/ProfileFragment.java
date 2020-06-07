@@ -45,7 +45,7 @@ public class ProfileFragment extends Fragment {
     private String signInMethod;
     private User user;
 
-    private TextView textViewName, textViewEmail, textViewGender, textViewCity, textViewBirthday;
+    private TextView textViewName, textViewEmail, textViewPhone, textViewGender, textViewCity, textViewBirthday;
     private Button edit, logout;
     private ImageView profile;
     private int id_gender;
@@ -69,6 +69,7 @@ public class ProfileFragment extends Fragment {
         //TEXT VIEW
         textViewName = root.findViewById(R.id.profile_display_name);
         textViewEmail = root.findViewById(R.id.profile_email);
+        textViewPhone = root.findViewById(R.id.profile_phone);
         textViewGender = root.findViewById(R.id.profile_gender);
         textViewCity = root.findViewById(R.id.profile_city);
         textViewBirthday = root.findViewById(R.id.profile_birthday);
@@ -121,7 +122,9 @@ public class ProfileFragment extends Fragment {
                         String displayName = ((Map) data.get(uid)).get("displayName").toString();
                         String email = ((Map) data.get(uid)).get("email").toString();
                         int id_gender = Integer.parseInt(((Map) data.get(uid)).get("gender").toString());
-                        String city = "", birthday = "";
+                        String phone = "", city = "", birthday = "";
+                        if (((Map) data.get(uid)).get("phone") != null)
+                            phone = ((Map) data.get(uid)).get("phone").toString();
                         if (((Map) data.get(uid)).get("city") != null)
                             city = ((Map) data.get(uid)).get("city").toString();
                         if (((Map) data.get(uid)).get("birthday") != null)
@@ -131,7 +134,7 @@ public class ProfileFragment extends Fragment {
                             objs = ((Map<String, PersonalObject>) ((Map) data.get(uid)).get("objs"));
                         else
                             objs = new HashMap<>();
-                        user = new User(uid, displayName, email, id_gender, city, birthday, objs);
+                        user = new User(uid, displayName, email, phone, id_gender, city, birthday, objs, icon);
                         setValues(user);
                     }
                 }
@@ -148,6 +151,7 @@ public class ProfileFragment extends Fragment {
         id_gender = user.getGender();
         textViewName.setText(user.getDisplayName());
         textViewEmail.setText(user.getEmail());
+        textViewPhone.setText(user.getPhone());
         textViewGender.setText(getIdGender(id_gender));
         textViewCity.setText(user.getCity());
         textViewBirthday.setText(user.getBirthday());
@@ -162,6 +166,7 @@ public class ProfileFragment extends Fragment {
         if(requestCode == RC_EDIT_PROFILE) {
             if(resultCode == Activity.RESULT_OK) {
                 id_gender = Integer.parseInt(data.getStringExtra("id_gender"));
+                textViewPhone.setText(data.getStringExtra("phone"));
                 textViewGender.setText(getIdGender(id_gender));
                 textViewCity.setText(data.getStringExtra("city"));
                 textViewBirthday.setText(data.getStringExtra("birthday"));
@@ -171,6 +176,7 @@ public class ProfileFragment extends Fragment {
 
                 String icon = saveImage("user_image.jpg");
 
+                user.setPhone(textViewPhone.getText().toString());
                 user.setGender(id_gender);
                 user.setCity(textViewCity.getText().toString());
                 user.setBirthday(textViewBirthday.getText().toString());
