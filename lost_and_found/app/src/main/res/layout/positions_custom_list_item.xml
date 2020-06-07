@@ -32,6 +32,7 @@
             android:id="@+id/home_show_all_position_map"
             android:layout_width="90dp"
             android:layout_height="90dp"
+            android:background="@drawable/my_button"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/home_show_all_position_description"

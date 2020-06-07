@@ -211,6 +211,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_marginTop="20dp"
                         android:orientation="horizontal">
 
                         <ImageButton
@@ -219,6 +220,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp"
                             android:layout_weight="1"
+                            android:background="@drawable/my_button"
                             app:srcCompat="@drawable/ic_baseline_map_48" />
                     </LinearLayout>
 
@@ -228,14 +230,15 @@
 
             <Button
                 android:id="@+id/found_lost_show_user"
-                style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="50dp"
+                android:background="@drawable/my_button"
                 android:text="@string/user_profile"
+                android:textColor="@color/colorPrimary"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -245,14 +248,15 @@
 
             <Button
                 android:id="@+id/found_lost_setBoolean"
-                style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="50dp"
+                android:background="@drawable/my_button"
                 android:text="@string/found_set_boolean"
+                android:textColor="@color/colorPrimary"
                 android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

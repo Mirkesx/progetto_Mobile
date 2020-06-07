@@ -135,7 +135,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="15dp"
+                    android:background="@drawable/my_button"
                     app:srcCompat="@drawable/ic_baseline_map_48" />
 
             </LinearLayout>
@@ -148,7 +149,9 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="50dp"
+                android:background="@drawable/my_button"
                 android:text="@string/home_show_add"
+                android:textColor="@color/colorPrimary"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
