@@ -241,6 +241,19 @@ public class FoundFragment extends Fragment {
                 DatabaseReference myRef = database.getReference();
                 myRef.child("founds").child(id).setValue(fi);
             }
+        } else if(requestCode == RC_SHOW_INSERTION) {
+            if(resultCode == Activity.RESULT_OK) {
+                String insertion_id = data.getStringExtra("insertion_id");
+                String icon = data.getStringExtra("icon");
+                DatabaseReference myRef = database.getReference();
+                myRef.child("founds").child(insertion_id).setValue(null);
+
+                if(icon != null && !icon.equals("")) {
+                    deleteFile(icon);
+                }
+
+                getOBJS();
+            }
         }
     }
 
@@ -311,5 +324,22 @@ public class FoundFragment extends Fragment {
                 Log.d("UPLOAD_PHOTO","Fail");
             }).addOnSuccessListener(taskSnapshot -> Log.d("UPLOAD_PHOTO","Success"));
         }
+    }
+
+    private void deleteFile(String path) {
+        File file = new File(getActivity().getFilesDir()+"/founds_images",path);
+        if(file.exists()) {
+            file.delete();
+        }
+        StorageReference storageRef = storage.getReference();
+        StorageReference fileToDelete = storageRef.child("founds/"+path);
+
+        // Delete the file
+        fileToDelete.delete().addOnSuccessListener(aVoid -> {
+            Log.d("Deleting_file","Deleted "+ "founds/"+path);
+            getOBJS();
+        }).addOnFailureListener(exception -> {
+            exception.printStackTrace();
+        });
     }
 }

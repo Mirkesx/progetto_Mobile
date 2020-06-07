@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item  android:id="@+id/found_lost_delete_insertion"
+        android:title="@string/home_delete"/>
+
+</menu>
