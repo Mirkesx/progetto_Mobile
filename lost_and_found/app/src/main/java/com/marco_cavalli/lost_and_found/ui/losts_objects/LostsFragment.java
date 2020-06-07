@@ -1,4 +1,5 @@
-package com.marco_cavalli.lost_and_found.ui.found_objects;
+package com.marco_cavalli.lost_and_found.ui.losts_objects;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
@@ -27,7 +28,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.marco_cavalli.lost_and_found.R;
 import com.marco_cavalli.lost_and_found.comparators.FoundItemComparator;
-import com.marco_cavalli.lost_and_found.custom_adapters.FoundCustomAdapter;
+import com.marco_cavalli.lost_and_found.custom_adapters.LostCustomAdapter;
 import com.marco_cavalli.lost_and_found.objects.FoundItem;
 import com.marco_cavalli.lost_and_found.objects.PersonalObject;
 import com.marco_cavalli.lost_and_found.objects.User;
@@ -41,20 +42,20 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-public class FoundFragment extends Fragment {
+public class LostsFragment extends Fragment {
 
     private String uid;
     private User user;
     private FirebaseDatabase database;
     private FirebaseStorage storage;
-    private ArrayList<FoundItem> your_founds, others_founds;
+    private ArrayList<FoundItem> your_lost, others_losts;
     private ListView insertion_list;
-    private FoundCustomAdapter your_ca, others_ca;
+    private LostCustomAdapter your_ca, others_ca;
     private final int RC_NEW_INSERTION = 10;
     private final int RC_SHOW_INSERTION = 11;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_found, container, false);
+        View root = inflater.inflate(R.layout.fragment_lost, container, false);
         setHasOptionsMenu(true);
 
         database = FirebaseDatabase.getInstance();
@@ -63,22 +64,22 @@ public class FoundFragment extends Fragment {
         uid = ((Dashboard) getActivity()).getUID();
         setUser(uid);
 
-        your_founds = new ArrayList<>();
-        others_founds = new ArrayList<>();
+        your_lost = new ArrayList<>();
+        others_losts = new ArrayList<>();
 
         //Getting items reference
-        insertion_list = root.findViewById(R.id.found_your_found_list);
+        insertion_list = root.findViewById(R.id.lost_your_lost_list);
 
         //Custom adapters
         int resID = R.layout.found_lost_custom_item;
-        your_ca = new FoundCustomAdapter(getActivity(), resID, your_founds);
-        others_ca = new FoundCustomAdapter(getActivity(), resID, others_founds);
+        your_ca = new LostCustomAdapter(getActivity(), resID, your_lost);
+        others_ca = new LostCustomAdapter(getActivity(), resID, others_losts);
         insertion_list.setAdapter(others_ca);
 
 
         //Listeners
         insertion_list.setOnItemClickListener((parent, view, position, id) -> {
-            Intent intent = new Intent(getContext(), ShowInsertionFound.class);
+            Intent intent = new Intent(getContext(), ShowInsertionLost.class);
             intent.putExtra("uid",uid);
             intent.putExtra("insertion_id", ((FoundItem)insertion_list.getAdapter().getItem(position)).getId() );
             startActivityForResult(intent, RC_SHOW_INSERTION);
@@ -103,8 +104,8 @@ public class FoundFragment extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Map<String, ?> data = ((Map<String,Object>) dataSnapshot.getValue());
                 if(data != null) {
-                    your_founds.clear();
-                    others_founds.clear();
+                    your_lost.clear();
+                    others_losts.clear();
                     for(Map.Entry<String, ?> entry : data.entrySet()) {
                         Map<String, ?> foundData = ((Map<String,Object>) entry.getValue());
                         String id, user_id, user_name, date, icon, object_name, description, address, timestamp;
@@ -141,12 +142,12 @@ public class FoundFragment extends Fragment {
                         FoundItem fi = new FoundItem(id,user_id,user_name,date,icon,object_name,description,address,latitude,longitude,timestamp,setFound);
 
                         if(uid.equals(user_id))
-                            your_founds.add(fi);
+                            your_lost.add(fi);
                         else
-                            others_founds.add(fi);
+                            others_losts.add(fi);
                     }
-                    Collections.sort(your_founds, new FoundItemComparator());
-                    Collections.sort(others_founds, new FoundItemComparator());
+                    Collections.sort(your_lost, new FoundItemComparator());
+                    Collections.sort(others_losts, new FoundItemComparator());
 
                     others_ca.notifyDataSetChanged();
                     your_ca.notifyDataSetChanged();
@@ -157,7 +158,7 @@ public class FoundFragment extends Fragment {
             public void onCancelled(DatabaseError databaseError) {
             }
         };
-        myRef.child("founds").addValueEventListener(userListener);
+        myRef.child("losts").addValueEventListener(userListener);
     }
 
     @Override
@@ -175,12 +176,12 @@ public class FoundFragment extends Fragment {
         else if(item.getTitle().equals(getString(R.string.found_lost_your_list))) {
             insertion_list.setAdapter(your_ca);
             your_ca.notifyDataSetChanged();
-            ((TextView)getActivity().findViewById(R.id.found_your_founds)).setText(getString(R.string.found_lost_your_list));
+            ((TextView)getActivity().findViewById(R.id.lost_your_losts)).setText(getString(R.string.found_lost_your_list));
         }
         else if(item.getTitle().equals(getString(R.string.found_lost_others_list))) {
             insertion_list.setAdapter(others_ca);
             others_ca.notifyDataSetChanged();
-            ((TextView)getActivity().findViewById(R.id.found_your_founds)).setText(getString(R.string.found_lost_others_list));
+            ((TextView)getActivity().findViewById(R.id.lost_your_losts)).setText(getString(R.string.found_lost_others_list));
         }
         return super.onOptionsItemSelected(item);
     }
@@ -235,19 +236,19 @@ public class FoundFragment extends Fragment {
                 address = data_bundle.get("address").toString();
                 latitude = Double.parseDouble(data_bundle.get("latitude").toString());
                 longitude = Double.parseDouble(data_bundle.get("longitude").toString());
-                icon = saveImage("found"+id+"_image.jpg");
+                icon = saveImage("lost"+id+"_image.jpg");
                 timestamp = createID();
                 FoundItem fi = new FoundItem(id,uid,user.getDisplayName(),date,icon,object_name,description,address,latitude,longitude, timestamp);
 
                 DatabaseReference myRef = database.getReference();
-                myRef.child("founds").child(id).setValue(fi);
+                myRef.child("losts").child(id).setValue(fi);
             }
         } else if(requestCode == RC_SHOW_INSERTION) {
             if(resultCode == Activity.RESULT_OK) {
                 String insertion_id = data.getStringExtra("insertion_id");
                 String icon = data.getStringExtra("icon");
                 DatabaseReference myRef = database.getReference();
-                myRef.child("founds").child(insertion_id).setValue(null);
+                myRef.child("losts").child(insertion_id).setValue(null);
 
                 if(icon != null && !icon.equals("")) {
                     deleteFile(icon);
@@ -292,7 +293,7 @@ public class FoundFragment extends Fragment {
             }
             Log.d("Image_management",tmpFile.toString());
 
-            File directory = new File(getActivity().getFilesDir(),"founds_images");
+            File directory = new File(getActivity().getFilesDir(),"losts_images");
             if(!directory.exists()){
                 directory.mkdir();
             }
@@ -314,9 +315,9 @@ public class FoundFragment extends Fragment {
 
     private void uploadFile(String path){
         if(!path.equals("")) {
-            Uri file = Uri.fromFile(new File(getActivity().getFilesDir()+"/founds_images",path));
+            Uri file = Uri.fromFile(new File(getActivity().getFilesDir()+"/losts_images",path));
             StorageReference storageRef = storage.getReference();
-            StorageReference riversRef = storageRef.child("founds/"+path);
+            StorageReference riversRef = storageRef.child("losts/"+path);
             UploadTask uploadTask = riversRef.putFile(file);
 
             // Register observers to listen for when the download is done or if it fails
@@ -328,16 +329,16 @@ public class FoundFragment extends Fragment {
     }
 
     private void deleteFile(String path) {
-        File file = new File(getActivity().getFilesDir()+"/founds_images",path);
-        if(file.exists()) {
+        File file = new File(getActivity().getFilesDir() + "/losts_images", path);
+        if (file.exists()) {
             file.delete();
         }
         StorageReference storageRef = storage.getReference();
-        StorageReference fileToDelete = storageRef.child("founds/"+path);
+        StorageReference fileToDelete = storageRef.child("losts/" + path);
 
         // Delete the file
         fileToDelete.delete().addOnSuccessListener(aVoid -> {
-            Log.d("Deleting_file","Deleted "+ "founds/"+path);
+            Log.d("Deleting_file", "Deleted " + "losts/" + path);
             getOBJS();
         }).addOnFailureListener(exception -> {
             exception.printStackTrace();

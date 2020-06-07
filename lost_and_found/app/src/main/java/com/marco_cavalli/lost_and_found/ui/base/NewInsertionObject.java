@@ -1,4 +1,4 @@
-package com.marco_cavalli.lost_and_found.ui.found_objects;
+package com.marco_cavalli.lost_and_found.ui.base;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -44,7 +44,7 @@ import java.util.List;
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
-public class NewFoundObject extends AppCompatActivity {
+public class NewInsertionObject extends AppCompatActivity {
 
     private EditText textObjectName, textDescription;
     private TextView textDate, textAddress, textLatitude, textLongitude;

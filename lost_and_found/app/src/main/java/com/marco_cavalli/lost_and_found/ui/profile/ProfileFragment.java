@@ -9,6 +9,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -31,6 +34,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.marco_cavalli.lost_and_found.objects.PersonalObject;
 import com.marco_cavalli.lost_and_found.ui.base.Dashboard;
+import com.marco_cavalli.lost_and_found.ui.base.ShowPolicy;
 import com.marco_cavalli.lost_and_found.ui.login.LoginScreen;
 import com.marco_cavalli.lost_and_found.R;
 import com.marco_cavalli.lost_and_found.objects.User;
@@ -59,6 +63,7 @@ public class ProfileFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         signInMethod = ((Dashboard)getActivity()).getSignInMethod();
         View root = inflater.inflate(R.layout.fragment_profile, container, false);
+        this.setHasOptionsMenu(true);
 
         uid = ((Dashboard) getActivity()).getUID();
 
@@ -282,5 +287,65 @@ public class ProfileFragment extends Fragment {
             exception.printStackTrace();
             Log.d("UPLOAD_PHOTO","Fail");
         }).addOnSuccessListener(taskSnapshot -> Log.d("UPLOAD_PHOTO","Success"));
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.profile_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if(item.getTitle().equals(getString(R.string.show_policy))) {
+            Intent policy = new Intent(getActivity(), ShowPolicy.class);
+            startActivity(policy);
+        }
+        else if(item.getTitle().equals(getString(R.string.delete_local_files))) {
+            deleteLocalFiles();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void deleteLocalFiles() {
+        File founds = new File(getActivity().getFilesDir(),"founds_images");
+        if (founds.isDirectory())
+        {
+            String[] children = founds.list();
+            for (int i = 0; i < children.length; i++)
+            {
+                new File(founds, children[i]).delete();
+            }
+        }
+
+        File tmp = new File(getActivity().getFilesDir(),"tmp");
+        if (tmp.isDirectory())
+        {
+            String[] children = tmp.list();
+            for (int i = 0; i < children.length; i++)
+            {
+                new File(tmp, children[i]).delete();
+            }
+        }
+
+        File losts = new File(getActivity().getFilesDir(),"losts_images");
+        if (losts.isDirectory())
+        {
+            String[] children = losts.list();
+            for (int i = 0; i < children.length; i++)
+            {
+                new File(losts, children[i]).delete();
+            }
+        }
+
+        File profile_images = new File(getActivity().getFilesDir(),"profile_images");
+        if (profile_images.isDirectory())
+        {
+            String[] children = profile_images.list();
+            for (int i = 0; i < children.length; i++)
+            {
+                new File(profile_images, children[i]).delete();
+            }
+        }
     }
 }

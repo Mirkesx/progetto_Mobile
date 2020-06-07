@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="horizontal"
     android:visibility="visible"
-    tools:context=".ui.notifications.NotificationsFragment"
+    tools:context=".ui.losts_objects.LostsFragment"
     tools:visibility="visible">
 
 

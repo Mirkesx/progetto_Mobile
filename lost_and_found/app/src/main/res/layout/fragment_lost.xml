@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.found_objects.FoundFragment">
+    tools:context=".ui.losts_objects.LostsFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -19,7 +19,7 @@
 
 
         <TextView
-            android:id="@+id/found_your_founds"
+            android:id="@+id/lost_your_losts"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -27,7 +27,7 @@
             android:textColor="@color/colorPrimary"
             android:textSize="20sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/found_your_found_list"
+            app:layout_constraintBottom_toTopOf="@+id/lost_your_lost_list"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.444"
             app:layout_constraintStart_toStartOf="parent"
@@ -35,7 +35,7 @@
 
 
         <ListView
-            android:id="@+id/found_your_found_list"
+            android:id="@+id/lost_your_lost_list"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginTop="16dp"
@@ -48,7 +48,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.555"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/found_your_founds">
+            app:layout_constraintTop_toBottomOf="@+id/lost_your_losts">
 
         </ListView>
 

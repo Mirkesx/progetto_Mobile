@@ -24,13 +24,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
 
-public class FoundCustomAdapter extends ArrayAdapter {
-
+public class LostCustomAdapter extends ArrayAdapter {
 
     private final Context context;
     private final ArrayList<FoundItem> objects;
 
-    public FoundCustomAdapter(@NonNull Context context, int resource, @NonNull ArrayList<FoundItem> objects) {
+    public LostCustomAdapter(@NonNull Context context, int resource, @NonNull ArrayList<FoundItem> objects) {
         super(context, resource, objects);
         this.context = context;
         this.objects = objects;
@@ -71,14 +70,14 @@ public class FoundCustomAdapter extends ArrayAdapter {
 
     private void setImage(ImageView icon, String path) {
         try{
-            File iconFile = new File(context.getFilesDir()+"/founds_images",path);
+            File iconFile = new File(context.getFilesDir()+"/losts_images",path);
             if(path.length() > 0 && iconFile.exists()) {
                 Bitmap b = BitmapFactory.decodeStream(new FileInputStream(iconFile));
                 icon.setImageBitmap(b);
             } else {
                 StorageReference storageRef = FirebaseStorage.getInstance().getReference();
-                StorageReference islandRef = storageRef.child("founds/"+path);
-                File newFile = new File(context.getFilesDir()+"/founds_images",path);
+                StorageReference islandRef = storageRef.child("losts/"+path);
+                File newFile = new File(context.getFilesDir()+"/losts_images",path);
 
                 islandRef.getFile(newFile).addOnSuccessListener(taskSnapshot -> {
                     icon.setImageURI(Uri.fromFile(newFile));

@@ -74,4 +74,18 @@
     <string name="found_set_boolean">Indica come \"ritrovato\"</string>
     <string name="show_insertion">Inserzione</string>
     <string name="profile_phone">Telefono</string>
+    <string name="show_profile">Mostra profilo utente</string>
+    <string name="insertion_status">Stato</string>
+    <string name="insertion_found">Ritrovato</string>
+    <string name="insertion_not_found">Non ritrovato</string>
+    <string name="choose_email_client">Scegli un client email</string>
+    <string name="email_found_subject">Dichiara come \"ritrovato\"</string>
+    <string name="email_found_message">Ciao! Penso che l\'oggetto che hai indicato sia il mio. Possiamo incontrarci?</string>
+    <string name="profile_telephone_hint">Il tuo numero</string>
+    <string name="profile_city_hint">La tua città</string>
+    <string name="mailer_not_found">Sembra che non hai alcuna app per scrivere email.</string>
+    <string name="show_policy">Mostra policy e regole</string>
+    <string name="delete_local_files">Cancella tutti i file locali</string>
+    <string name="title_lost">Oggetti Persi</string>
+    <string name="email_lost_message">Ciao! Penso di aver ritrovato l\'oggetto che hai perso. Possiamo incontrarci?</string>
 </resources>

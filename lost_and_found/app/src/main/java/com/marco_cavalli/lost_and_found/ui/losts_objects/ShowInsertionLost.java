@@ -1,4 +1,4 @@
-package com.marco_cavalli.lost_and_found.ui.found_objects;
+package com.marco_cavalli.lost_and_found.ui.losts_objects;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -33,7 +33,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.util.Map;
 
-public class ShowInsertion extends AppCompatActivity {
+public class ShowInsertionLost extends AppCompatActivity {
     private TextView textStatus, textObjectName, textDescription, textDate, textAddress, textLatitude, textLongitude;
     private ImageView imageView;
     private Button button;
@@ -148,7 +148,7 @@ public class ShowInsertion extends AppCompatActivity {
                         button.setOnClickListener(v -> {
                             insertion.setSetFound(true);
                             DatabaseReference myRef = database.getReference();
-                            myRef.child("founds").child(insertion.getId()).child("setFound").setValue(true);
+                            myRef.child("losts").child(insertion.getId()).child("setFound").setValue(true);
                             textStatus.setText(getString(R.string.insertion_found));
                             textStatus.setBackgroundColor(getColor(R.color.found_item));
                         });
@@ -159,6 +159,7 @@ public class ShowInsertion extends AppCompatActivity {
                             Intent newActivity = new Intent(getApplicationContext(), ShowUserProfile.class);
                             newActivity.putExtra("uid", uid);
                             newActivity.putExtra("user_id", insertion.getUser_id());
+                            newActivity.putExtra("type", "lost");
                             startActivity(newActivity);
                         });
                     }
@@ -174,7 +175,7 @@ public class ShowInsertion extends AppCompatActivity {
             public void onCancelled(DatabaseError databaseError) {
             }
         };
-        myRef.child("founds").addValueEventListener(foundItemListener);
+        myRef.child("losts").addValueEventListener(foundItemListener);
     }
 
     private void setValues() {
@@ -187,7 +188,7 @@ public class ShowInsertion extends AppCompatActivity {
     }
 
     private void setImageView(String path)  {
-        File file = new File(getFilesDir()+"/founds_images",path);
+        File file = new File(getFilesDir()+"/losts_images",path);
         try {
             Bitmap b = BitmapFactory.decodeStream(new FileInputStream(file));
             imageView.setImageBitmap(b);

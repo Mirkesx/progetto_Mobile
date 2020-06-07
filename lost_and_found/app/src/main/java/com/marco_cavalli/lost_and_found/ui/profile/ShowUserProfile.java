@@ -41,7 +41,7 @@ import java.util.Map;
 
 public class ShowUserProfile extends AppCompatActivity {
 
-    private String uid, user_id;
+    private String uid, user_id, type;
     private User user;
 
     private TextView textViewName, textViewEmail, textViewPhone, textViewGender, textViewCity, textViewBirthday;
@@ -59,6 +59,7 @@ public class ShowUserProfile extends AppCompatActivity {
 
         uid = data_bundle.get("uid").toString();
         user_id = data_bundle.get("user_id").toString();
+        type = data_bundle.get("type").toString();
 
         //Elements
         textViewName = findViewById(R.id.profile_display_name);
@@ -123,12 +124,17 @@ public class ShowUserProfile extends AppCompatActivity {
         textViewBirthday.setText(user.getBirthday());
 
         if (user.getEmail().length() > 0) {
+            String email_body;
+            if(type.equals("found"))
+                email_body = getString(R.string.email_found_message);
+            else
+                email_body = getString(R.string.email_lost_message);
             email.setVisibility(View.VISIBLE);
             email.setOnClickListener(v -> {
                 String mailto = "mailto:"+user.getEmail() +
                         "?cc="+
                         "&subject=" + Uri.encode(getString(R.string.email_found_subject)) +
-                        "&body=" + Uri.encode(getString(R.string.email_found_message));
+                        "&body=" + Uri.encode(email_body);
 
                 Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
                 emailIntent.setData(Uri.parse(mailto));
@@ -152,7 +158,10 @@ public class ShowUserProfile extends AppCompatActivity {
             message.setOnClickListener(v -> {
                 Uri uri = Uri.parse("smsto:"+user.getPhone());
                 Intent messIntent = new Intent(Intent.ACTION_SENDTO, uri);
-                messIntent.putExtra("sms_body", getString(R.string.email_found_message));
+                if(type.equals("found"))
+                    messIntent.putExtra("sms_body", getString(R.string.email_found_message));
+                else
+                    messIntent.putExtra("sms_body", getString(R.string.email_lost_message));
                 startActivity(messIntent);
             });
         }
