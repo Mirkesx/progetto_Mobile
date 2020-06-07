@@ -6,7 +6,7 @@
     <string name="Confirm">Seleziona</string>
     <string name="Cancel">Cancella</string>
     <string name="profile_edit">Modifica</string>
-    <string name="profile_display_name">Il tuo nome</string>
+    <string name="profile_display_name">Nome</string>
     <string name="profile_gender">Genere</string>
     <string name="profile_city">Città</string>
     <string name="profile_birthday">Data di nascita</string>
@@ -69,4 +69,9 @@
     <string name="longitude">Longitudine</string>
     <string name="address">Indirizzo</string>
     <string name="home_create_position_missing_description">Devi indicare una descrizione!</string>
+    <string name="new_insertion_missing_data">Devi indicare sia il nome che la descrizione.</string>
+    <string name="user_profile">Profilo utente</string>
+    <string name="found_set_boolean">Indica come \"ritrovato\"</string>
+    <string name="show_insertion">Inserzione</string>
+    <string name="profile_phone">Telefono</string>
 </resources>

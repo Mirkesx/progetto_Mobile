@@ -12,6 +12,7 @@ public class User {
     private String userID;
     private String displayName;
     private String email;
+    private String phone;
     private int gender;
     private String city;
     private String birthday;
@@ -26,6 +27,7 @@ public class User {
         this.userID = userID;
         this.displayName = displayName;
         this.email = email;
+        this.phone = "";
         this.gender = 0; //not_specified
         this.city = "";
         this.birthday ="";
@@ -36,6 +38,7 @@ public class User {
         this.userID = userID;
         this.displayName = displayName;
         this.email = email;
+        this.phone = "";
         this.gender = gender;
         this.city = city;
         this.birthday = birthday;
@@ -44,10 +47,11 @@ public class User {
     }
 
 
-    public User(String userID, String displayName, String email, int gender, String city, String birthday, Map<String,PersonalObject> objs, String icon) {
+    public User(String userID, String displayName, String email, String phone, int gender, String city, String birthday, Map<String,PersonalObject> objs, String icon) {
         this.userID = userID;
         this.displayName = displayName;
         this.email = email;
+        this.phone = phone;
         this.gender = gender;
         this.city = city;
         this.birthday = birthday;
@@ -117,5 +121,13 @@ public class User {
 
     public void setUserID(String userID) {
         this.userID = userID;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 }

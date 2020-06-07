@@ -5,10 +5,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -23,17 +21,16 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 import com.marco_cavalli.lost_and_found.R;
 import com.marco_cavalli.lost_and_found.objects.FoundItem;
+import com.marco_cavalli.lost_and_found.ui.profile.ShowUserProfile;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.util.Map;
 
 public class ShowInsertion extends AppCompatActivity {
-    private TextView textObjectName, textDescription, textDate, textAddress, textLatitude, textLongitude;
+    private TextView textStatus, textObjectName, textDescription, textDate, textAddress, textLatitude, textLongitude;
     private ImageView imageView;
     private Button button;
     private ImageButton maps;
@@ -56,6 +53,7 @@ public class ShowInsertion extends AppCompatActivity {
         insertion = null;
 
         //Initialize elements
+        textStatus = findViewById(R.id.found_lost_show_status_value);
         textObjectName = findViewById(R.id.found_lost_show_object_name_edit);
         textDescription = findViewById(R.id.found_lost_show_description_edit);
         textDate = findViewById(R.id.found_lost_show_date_value);
@@ -133,11 +131,32 @@ public class ShowInsertion extends AppCompatActivity {
 
                     insertion = new FoundItem(insertion_id,user_id,user_name,date,icon,object_name,description,address,latitude,longitude,timestamp,setFound);
 
+                    if(setFound) {
+                        textStatus.setText(getString(R.string.insertion_found));
+                        textStatus.setBackgroundColor(getColor(R.color.found_item));
+                    } else {
+                        textStatus.setText(getString(R.string.insertion_not_found));
+                        textStatus.setBackgroundColor(getColor(R.color.not_found_item));
+                    }
+
                     if(uid.equals(user_id)) {
                         button = findViewById(R.id.found_lost_setBoolean);
+                        button.setOnClickListener(v -> {
+                            insertion.setSetFound(true);
+                            DatabaseReference myRef = database.getReference();
+                            myRef.child("founds").child(insertion.getId()).child("setFound").setValue(true);
+                            textStatus.setText(getString(R.string.insertion_found));
+                            textStatus.setBackgroundColor(getColor(R.color.found_item));
+                        });
                     }
                     else {
                         button = findViewById(R.id.found_lost_show_user);
+                        button.setOnClickListener(v -> {
+                            Intent newActivity = new Intent(getApplicationContext(), ShowUserProfile.class);
+                            newActivity.putExtra("uid", uid);
+                            newActivity.putExtra("user_id", insertion.getUser_id());
+                            startActivity(newActivity);
+                        });
                     }
                     button.setVisibility(View.VISIBLE);
 

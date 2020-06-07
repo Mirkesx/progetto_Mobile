@@ -86,6 +86,12 @@
             android:name="com.marco_cavalli.lost_and_found.ui.found_objects.NewFoundObject">
         </activity>
 
+        <activity
+            android:theme="@style/AppTheme"
+            android:label="@string/show_profile"
+            android:name="com.marco_cavalli.lost_and_found.ui.profile.ShowUserProfile">
+        </activity>
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_api_key" />
