@@ -71,6 +71,8 @@ public class ShowUserProfile extends AppCompatActivity {
         message = findViewById(R.id.profile_send_message);
         profile = findViewById(R.id.profile_image);
 
+        findViewById(R.id.profile_manage_layout).setVisibility(View.GONE);
+
         getUser();
     }
 
