@@ -88,4 +88,5 @@
     <string name="delete_local_files">Cancella tutti i file locali</string>
     <string name="title_lost">Oggetti Persi</string>
     <string name="email_lost_message">Ciao! Penso di aver ritrovato l\'oggetto che hai perso. Possiamo incontrarci?</string>
+    <string name="policy" translatable="false">Regole d\'uso: - Usando l\'app permetti a terzi di conoscere informazioni personali quali email, telefono, nome e foto personali - Usando l\'app permetti a Ritrovami! di avere accesso alla tua posizione, alla tua fotocamera, alla gestione dei file - Le foto caricate su Ritrovami! saranno condivise tra tutti gli utenti della community - E\' vietato usare Ritrovami! per effettuare compravendite e/o scambi di oggetti - Lo staff di Ritrovami! non si ritiene responsabile del comportamento degli utenti. Se un utente si appropria di un oggetto non suo e il proprietario vorrebbe farlo presente, Ritrovami! non sarà ritenuta causa dell\'errore in quanto le comunicazioni e la presa di accordi tra utenti avviene al di fuori dell\'app Ritrovami!</string>
 </resources>

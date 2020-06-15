@@ -1,4 +1,4 @@
-package com.marco_cavalli.lost_and_found.ui.found_objects;
+package com.marco_cavalli.lost_and_found.ui.founds_objects;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
@@ -41,7 +41,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-public class FoundFragment extends Fragment {
+public class FoundsFragment extends Fragment {
 
     private String uid;
     private User user;

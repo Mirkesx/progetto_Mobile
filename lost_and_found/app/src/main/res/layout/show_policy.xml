@@ -17,7 +17,6 @@
             android:id="@+id/policy_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/policy"
             android:textSize="20sp" />
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

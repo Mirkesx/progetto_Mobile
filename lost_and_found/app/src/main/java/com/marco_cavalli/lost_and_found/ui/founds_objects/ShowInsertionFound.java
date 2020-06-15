@@ -1,4 +1,4 @@
-package com.marco_cavalli.lost_and_found.ui.found_objects;
+package com.marco_cavalli.lost_and_found.ui.founds_objects;
 
 import android.app.Activity;
 import android.content.Intent;

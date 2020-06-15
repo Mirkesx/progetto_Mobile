@@ -18,7 +18,7 @@
 
     <fragment
         android:id="@+id/navigation_found"
-        android:name="com.marco_cavalli.lost_and_found.ui.found_objects.FoundFragment"
+        android:name="com.marco_cavalli.lost_and_found.ui.founds_objects.FoundsFragment"
         android:label="@string/title_found"
         tools:layout="@layout/fragment_found" />
 
